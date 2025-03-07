@@ -10,6 +10,7 @@
 		38DDBBF42D7A3E0F00D7CE4C /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 38DDBBF32D7A3E0F00D7CE4C /* FirebaseAuth */; };
 		38DDBBF62D7A3E0F00D7CE4C /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 38DDBBF52D7A3E0F00D7CE4C /* FirebaseAuthCombine-Community */; };
 		38DDBBF82D7A3E0F00D7CE4C /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 38DDBBF72D7A3E0F00D7CE4C /* FirebaseCore */; };
+		38DDBC0C2D7BA80700D7CE4C /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 38DDBC0B2D7BA80700D7CE4C /* FirebaseFirestore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				38DDBBF42D7A3E0F00D7CE4C /* FirebaseAuth in Frameworks */,
+				38DDBC0C2D7BA80700D7CE4C /* FirebaseFirestore in Frameworks */,
 				38DDBBF82D7A3E0F00D7CE4C /* FirebaseCore in Frameworks */,
 				38DDBBF62D7A3E0F00D7CE4C /* FirebaseAuthCombine-Community in Frameworks */,
 			);
@@ -90,6 +92,7 @@
 				38DDBBF32D7A3E0F00D7CE4C /* FirebaseAuth */,
 				38DDBBF52D7A3E0F00D7CE4C /* FirebaseAuthCombine-Community */,
 				38DDBBF72D7A3E0F00D7CE4C /* FirebaseCore */,
+				38DDBC0B2D7BA80700D7CE4C /* FirebaseFirestore */,
 			);
 			productName = Gatherly;
 			productReference = 6207D3BF2D6C245B0056D13B /* Gatherly.app */;
@@ -377,6 +380,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 38DDBBF22D7A3E0F00D7CE4C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCore;
+		};
+		38DDBC0B2D7BA80700D7CE4C /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 38DDBBF22D7A3E0F00D7CE4C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

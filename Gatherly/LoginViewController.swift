@@ -44,6 +44,8 @@ class LoginViewController: UIViewController {
                 (authResult,error) in
                 if let error = error as NSError? {
                     showAlert(on: self, title: "Signup Failed", message: "\(error.localizedDescription)")
+                } else {
+                    self.performSegue(withIdentifier: self.segueIdentifier, sender: nil)
                 }
         }
     }

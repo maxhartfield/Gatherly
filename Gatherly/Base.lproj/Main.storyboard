@@ -115,7 +115,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.77254903320000001" green="0.74117648599999997" blue="0.6549019814" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="one-time-code"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JgX-gw-yZ5">
                                 <rect key="frame" x="24" y="386" width="45" height="21"/>
@@ -168,7 +168,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.77254903320000001" green="0.74117648599999997" blue="0.6549019814" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="one-time-code"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Retype Password" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BR7-6y-Cnu">
                                 <rect key="frame" x="24" y="554" width="141" height="21"/>
@@ -221,7 +221,7 @@
                         <outlet property="loginButton" destination="zKi-GH-ZE8" id="PMw-jw-wbb"/>
                         <outlet property="passwordTextField" destination="83c-Bp-aVN" id="ycN-aS-4zR"/>
                         <outlet property="retypePasswordTextField" destination="vGP-MM-DWn" id="0yC-zO-JRf"/>
-                        <segue destination="Bv2-AL-FV0" kind="show" identifier="HomeFromCreateAccount" id="VJv-ul-nvT"/>
+                        <segue destination="Bv2-AL-FV0" kind="presentation" identifier="HomeFromCreateAccount" modalPresentationStyle="fullScreen" id="VJv-ul-nvT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WC0-9j-FmO" sceneMemberID="firstResponder"/>
@@ -400,11 +400,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="XCK-zX-Adx">
-                                <rect key="frame" x="0.0" y="104" width="393" height="699"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="XCK-zX-Adx">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="803"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="nof-Ve-26H" detailTextLabel="2Rw-7U-OFP" style="IBUITableViewCellStyleSubtitle" id="IZN-rN-ukc">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UserPartyCell" textLabel="nof-Ve-26H" detailTextLabel="2Rw-7U-OFP" style="IBUITableViewCellStyleSubtitle" id="IZN-rN-ukc">
                                         <rect key="frame" x="0.0" y="50" width="393" height="43.666667938232422"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="IZN-rN-ukc" id="LVe-RX-b29">
@@ -440,9 +440,9 @@
                         <color key="backgroundColor" red="0.40392160420000001" green="0.49803921579999999" blue="0.49019610879999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="a3O-cB-umb" firstAttribute="trailing" secondItem="XCK-zX-Adx" secondAttribute="trailing" id="1dh-6p-Y4h"/>
+                            <constraint firstItem="XCK-zX-Adx" firstAttribute="top" secondItem="a3O-cB-umb" secondAttribute="top" id="4Xu-lz-1Uf"/>
                             <constraint firstItem="a3O-cB-umb" firstAttribute="bottom" secondItem="XCK-zX-Adx" secondAttribute="bottom" id="Cqk-pN-dc5"/>
                             <constraint firstItem="XCK-zX-Adx" firstAttribute="leading" secondItem="a3O-cB-umb" secondAttribute="leading" id="x9L-Nm-Udf"/>
-                            <constraint firstItem="a3O-cB-umb" firstAttribute="bottom" secondItem="XCK-zX-Adx" secondAttribute="bottom" id="xpJ-TZ-vEb"/>
                         </constraints>
                     </view>
                     <toolbarItems/>
@@ -466,6 +466,9 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="tableView" destination="XCK-zX-Adx" id="vOL-oM-IVF"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6kQ-wL-s91" sceneMemberID="firstResponder"/>
             </objects>
@@ -577,12 +580,22 @@
                                     <color key="baseForegroundColor" systemColor="labelColor"/>
                                     <color key="baseBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
+                                <connections>
+                                    <action selector="createPartyButtonPressed:" destination="DtB-HF-6mI" eventType="touchUpInside" id="9d6-4i-Pfu"/>
+                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDB-mp-Ybl"/>
                         <color key="backgroundColor" red="0.40392160420000001" green="0.49803921579999999" blue="0.49019610879999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     </view>
                     <navigationItem key="navigationItem" id="OmX-ZJ-HmL"/>
+                    <connections>
+                        <outlet property="dateTextField" destination="wjc-pJ-dvu" id="hrr-TA-02x"/>
+                        <outlet property="partyDescriptionTextField" destination="CcY-iA-u0l" id="lhU-dk-Xe0"/>
+                        <outlet property="partyNameTextField" destination="JvV-tV-td3" id="LAE-dX-oPQ"/>
+                        <outlet property="timeTextField" destination="ezU-K5-YdZ" id="xnm-af-ZrT"/>
+                        <segue destination="fCY-yg-BPN" kind="presentation" identifier="HomeFromCreateParty" modalPresentationStyle="fullScreen" id="58e-Lz-RNo"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="O2h-Sa-EEB" sceneMemberID="firstResponder"/>
             </objects>
@@ -1943,7 +1956,8 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="mCh-XT-ZWI"/>
-        <segue reference="XcE-BM-4dc"/>
+        <segue reference="58e-Lz-RNo"/>
+        <segue reference="PMa-fa-Tr5"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" systemColor="labelColor"/>
     <resources>

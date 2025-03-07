@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore
 
 class CreateAccountViewController: UIViewController {
 
@@ -42,7 +43,9 @@ class CreateAccountViewController: UIViewController {
 
     @IBAction func loginButtonPressed(_ sender: Any) {
         
-        guard let email = emailTextField.text,
+        guard let firstName = firstNameTextField.text,
+              let lastName = lastNameTextField.text,
+              let email = emailTextField.text,
               let password = passwordTextField.text,
               let retypedPassword = retypePasswordTextField.text else {
             showAlert(on: self, title: "Error", message: "Please fill in all fields")
@@ -69,6 +72,26 @@ class CreateAccountViewController: UIViewController {
             (authResult,error) in
             if let error = error as NSError? {
                 showAlert(on: self, title: "Signup Failed", message: "\(error.localizedDescription)")
+            }
+            guard let uid = authResult?.user.uid else {
+                showAlert(on: self, title: "Signup Error", message: "Could not get user ID.")
+                return
+            }
+            let userData: [String: Any] = [
+                "firstName": firstName,
+                "lastName": lastName,
+                "email": email,
+                "partyIdsHosting": [],
+                "partyIdsAttending": [],
+                "rsvps": [:],
+                "darkMode": true
+            ]
+            Firestore.firestore().collection("users").document(uid).setData(userData) { error in
+                if let error = error {
+                    showAlert(on: self, title: "Firestore Error", message: "Failed to save user: \(error.localizedDescription)")
+                } else {
+                    self.performSegue(withIdentifier: self.segueIdentifier, sender: nil)
+                }
             }
         }
     }

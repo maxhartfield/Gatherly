@@ -6,26 +6,120 @@
 //
 
 import UIKit
+import FirebaseFirestore
+import FirebaseAuth
 
-
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource  {
     
     var partyIdEntered: String?
+    let cellIdentifier = "UserPartyCell"
+    @IBOutlet weak var tableView: UITableView!
+    var parties: [Party] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         updateDarkMode(darkMode: darkMode, to: view)
         navigationController?.navigationBar.tintColor = .white
-
-        // Custom color
-        
-
         // Do any additional setup after loading the view.
+        tableView.delegate = self
+        tableView.dataSource = self
+        fetchUserParties()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateDarkMode(darkMode: darkMode, to: view)
+    }
+    
+    func fetchUserParties() {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            showAlert(on: self, title: "Error", message: "No user logged in.")
+            return
+        }
+        
+        let userRef = Firestore.firestore().collection("users").document(uid)
+        userRef.getDocument { document, error in
+            if let error = error {
+                showAlert(on: self, title: "Error", message: "Failed to fetch user data: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let data = document?.data(),
+                  let partyIdsHosting = data["partyIdsHosting"] as? [String],
+                  let partyIdsAttending = data["partyIdsAttending"] as? [String],
+                  let rsvps = data["rsvps"] as? [String: String] else {
+                showAlert(on: self, title: "Error", message: "Invalid user data format.")
+                return
+            }
+            
+            let allPartyIds = partyIdsHosting + partyIdsAttending
+            self.parties.removeAll()
+            
+            let group = DispatchGroup()
+            
+            for partyId in allPartyIds {
+                group.enter()
+                
+                Firestore.firestore().collection("parties").document(partyId).getDocument { partyDoc, error in
+                    defer { group.leave() }
+                    
+                    if let error = error {
+                        print("Error fetching party \(partyId): \(error.localizedDescription)")
+                        return
+                    }
+                    
+                    if let partyData = partyDoc?.data(),
+                       let name = partyData["name"] as? String,
+                       let dateString = partyData["date"] as? String,
+                       let time = partyData["time"] as? String,
+                       let hostUid = partyData["hostUid"] as? String {
+                        
+                        let isHost = (hostUid == uid)
+                        let rsvpStatus = rsvps[partyId] ?? "No Response"
+                        
+                        let party = Party(partyId: partyId, name: name, date: dateString, time: time, rsvpStatus: rsvpStatus, isHost: isHost)
+                        self.parties.append(party)
+                    }
+                }
+            }
+            group.notify(queue: .main) {
+                self.parties.sort { $0.date < $1.date }
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return parties.count
+    }
+        
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
+        
+        let party = parties[indexPath.row]
+        
+        cell.textLabel?.text = "\(party.name) - \(party.date) at \(party.time)"
+        cell.detailTextLabel?.text = party.isHost ? "Host" : "Invitee"
+        cell.detailTextLabel?.textColor = .white
+        
+        switch party.rsvpStatus {
+        case "Going":
+            cell.backgroundColor = .systemGreen
+        case "Maybe":
+            cell.backgroundColor = .systemYellow
+        case "Not Going":
+            cell.backgroundColor = .systemRed
+        default:
+            cell.backgroundColor = .systemGray
+        }
+        
+        return cell
+    }
+        
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedParty = parties[indexPath.row]
+        print("Selected party: \(selectedParty.name), RSVP: \(selectedParty.rsvpStatus)")
+        //segue
     }
     
     @IBAction func joinButtonPressed(_ sender: Any) {
@@ -52,6 +146,5 @@ class HomeViewController: UIViewController {
         
         present(controller,animated:true)
     }
-    
 
 }
