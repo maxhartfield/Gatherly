@@ -1,50 +1,28 @@
 //
-//  SettingsViewController.swift
+//  PotluckWishlistViewController.swift
 //  Gatherly
 //
-//  Created by Max Hartfield on 3/6/25.
+//  Created by Samika Iyer on 3/7/25.
 //
 
 import UIKit
-import FirebaseAuth
 
-var darkMode = true // CHANGE TO WHAT USER HAD STORED
+class PotluckWishlistViewController: UIViewController {
 
-class SettingsViewController: UIViewController {
-    
-    let segueIdentifier = "LoginFromSettings"
-
-    @IBOutlet weak var darkModeState: UISwitch!
-    
-    @IBOutlet weak var logoutButton: UIButton!
-    @IBOutlet weak var submitButton: UIButton!
-    @IBOutlet weak var passwordEdit: UIButton!
-    @IBOutlet weak var usernameEdit: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
-        darkModeState.isOn = darkMode
         updateDarkMode()
-        logoutButton.tintColor = .white
-        submitButton.tintColor = .white
-        usernameEdit.tintColor = .white
-        passwordEdit.tintColor = .white
+
+        // Do any additional setup after loading the view.
     }
     
-    
-    @IBAction func darkModePressed(_ sender: UISwitch) {
-        darkMode = darkModeState.isOn
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         updateDarkMode()
     }
-    @IBAction func logoutButtonPressed(_ sender: Any) {
-        do {
-            try Auth.auth().signOut()
-            self.performSegue(withIdentifier: self.segueIdentifier, sender:nil)
-            // CHANGE to no segue - just pop all previous screens and go back to login with no info or create a new login, otherwise a back button pops up due to the embedding in nav controller
-        } catch {
-            print("Sign out error")
-        }
-    }
     
+    
+
     @objc func updateDarkMode() {
         if let oldGradientLayer = view.layer.sublayers?.first(where: { $0 is CAGradientLayer }) {
                 oldGradientLayer.removeFromSuperlayer()

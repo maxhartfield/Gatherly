@@ -11,11 +11,25 @@ import FirebaseAuth
 class LoginViewController: UIViewController {
 
     @IBOutlet weak var emailTextField: UITextField!
+    @IBOutlet weak var loginButton: UIButton!
+    
+    @IBOutlet weak var createAccountButton: UIButton!
+    
     @IBOutlet weak var passwordTextField: UITextField!
     let segueIdentifier = "HomeFromLogin"
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let gradientLayer = CAGradientLayer()
+                gradientLayer.colors = [
+                    UIColor(red: 52/255, green: 152/255, blue: 219/255, alpha: 1.0).cgColor,  // Blue
+                    UIColor(red: 155/255, green: 89/255, blue: 182/255, alpha: 1.0).cgColor   // Purple
+                ]
+                gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+                gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
+                gradientLayer.frame = view.bounds
+                view.layer.insertSublayer(gradientLayer, at: 0)
+     
         // Do any additional setup after loading the view.
         Auth.auth().addStateDidChangeListener() {
             (auth,user) in
@@ -26,6 +40,8 @@ class LoginViewController: UIViewController {
             }
         }
     }
+    
+
 
     @IBAction func loginButtonPressed(_ sender: Any) {
         guard let email = emailTextField.text,
@@ -50,6 +66,7 @@ class LoginViewController: UIViewController {
         }))
         present(alert, animated: true)
     }
+
     
 }
 

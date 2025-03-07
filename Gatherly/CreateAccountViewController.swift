@@ -15,10 +15,29 @@ class CreateAccountViewController: UIViewController {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var retypePasswordTextField: UITextField!
+    @IBOutlet weak var cancelButton: UIButton!
+    
+    @IBOutlet weak var loginButton: UIButton!
     let segueIdentifier = "HomeFromCreateAccount"
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        let gradientLayer = CAGradientLayer()
+            gradientLayer.colors = [
+                UIColor(red: 52/255, green: 152/255, blue: 219/255, alpha: 1.0).cgColor,  // Blue
+                UIColor(red: 155/255, green: 89/255, blue: 182/255, alpha: 1.0).cgColor   // Purple
+            ]
+            gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+            gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
+            gradientLayer.frame = view.bounds
+            view.layer.insertSublayer(gradientLayer, at: 0)
+        loginButton.tintColor = .white
+        cancelButton.tintColor = .white
+        firstNameTextField.tintColor = .white
+        lastNameTextField.tintColor = .white
+        emailTextField.tintColor = .white
+        passwordTextField.tintColor = .white
+        retypePasswordTextField.tintColor = .white
         Auth.auth().addStateDidChangeListener() {
             (auth,user) in
             if user != nil {
@@ -82,4 +101,6 @@ class CreateAccountViewController: UIViewController {
         }))
         present(alert, animated: true)
     }
+
+
 }
