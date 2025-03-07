@@ -22,22 +22,14 @@ class CreateAccountViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let gradientLayer = CAGradientLayer()
-            gradientLayer.colors = [
-                UIColor(red: 52/255, green: 152/255, blue: 219/255, alpha: 1.0).cgColor,  // Blue
-                UIColor(red: 155/255, green: 89/255, blue: 182/255, alpha: 1.0).cgColor   // Purple
-            ]
-            gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
-            gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
-            gradientLayer.frame = view.bounds
-            view.layer.insertSublayer(gradientLayer, at: 0)
+        updateDarkMode(darkMode: true, to: view)
         loginButton.tintColor = .white
         cancelButton.tintColor = .white
-        firstNameTextField.tintColor = .white
-        lastNameTextField.tintColor = .white
-        emailTextField.tintColor = .white
-        passwordTextField.tintColor = .white
-        retypePasswordTextField.tintColor = .white
+        firstNameTextField.backgroundColor = .white
+        lastNameTextField.backgroundColor = .white
+        emailTextField.backgroundColor = .white
+        passwordTextField.backgroundColor = .white
+        retypePasswordTextField.backgroundColor = .white
         Auth.auth().addStateDidChangeListener() {
             (auth,user) in
             if user != nil {
@@ -53,22 +45,22 @@ class CreateAccountViewController: UIViewController {
         guard let email = emailTextField.text,
               let password = passwordTextField.text,
               let retypedPassword = retypePasswordTextField.text else {
-            showAlert(title: "Error", message: "Please fill in all fields")
+            showAlert(on: self, title: "Error", message: "Please fill in all fields")
             return
         }
 
         guard isValidEmail(email) else {
-            showAlert(title: "Invalid Email", message: "Please enter a valid email address.")
+            showAlert(on: self, title: "Invalid Email", message: "Please enter a valid email address.")
             return
         }
 
         guard isValidPassword(password) else {
-            showAlert(title: "Weak Password", message: "Password must be at least 6 characters.")
+            showAlert(on: self, title: "Weak Password", message: "Password must be at least 6 characters.")
             return
         }
 
         guard password == retypedPassword else {
-            showAlert(title: "Password Mismatch", message: "Passwords do not match.")
+            showAlert(on: self, title: "Password Mismatch", message: "Passwords do not match.")
             return
         }
 
@@ -76,7 +68,7 @@ class CreateAccountViewController: UIViewController {
                                password: passwordTextField.text!) {
             (authResult,error) in
             if let error = error as NSError? {
-                self.showAlert(title: "Signup Failed", message: "\(error.localizedDescription)")
+                showAlert(on: self, title: "Signup Failed", message: "\(error.localizedDescription)")
             }
         }
     }
@@ -93,14 +85,5 @@ class CreateAccountViewController: UIViewController {
        let minPasswordLength = 6
        return password.count >= minPasswordLength
     }
-
-    func showAlert(title: String, message: String, completion: (() -> Void)? = nil) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
-            completion?()
-        }))
-        present(alert, animated: true)
-    }
-
 
 }

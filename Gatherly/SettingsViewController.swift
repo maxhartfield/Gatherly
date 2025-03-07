@@ -23,7 +23,7 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         darkModeState.isOn = darkMode
-        updateDarkMode()
+        updateDarkMode(darkMode: darkMode, to: view)
         logoutButton.tintColor = .white
         submitButton.tintColor = .white
         usernameEdit.tintColor = .white
@@ -33,7 +33,7 @@ class SettingsViewController: UIViewController {
     
     @IBAction func darkModePressed(_ sender: UISwitch) {
         darkMode = darkModeState.isOn
-        updateDarkMode()
+        updateDarkMode(darkMode: darkMode, to: view)
     }
     @IBAction func logoutButtonPressed(_ sender: Any) {
         do {
@@ -44,33 +44,5 @@ class SettingsViewController: UIViewController {
             print("Sign out error")
         }
     }
-    
-    @objc func updateDarkMode() {
-        if let oldGradientLayer = view.layer.sublayers?.first(where: { $0 is CAGradientLayer }) {
-                oldGradientLayer.removeFromSuperlayer()
-            }
-        if (darkMode){
-            let gradientLayer = CAGradientLayer()
-                gradientLayer.colors = [
-                    UIColor(red: 52/255, green: 152/255, blue: 219/255, alpha: 1.0).cgColor,  // Blue
-                    UIColor(red: 155/255, green: 89/255, blue: 182/255, alpha: 1.0).cgColor   // Purple
-                ]
-                gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
-                gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
-                gradientLayer.frame = view.bounds
-                view.layer.insertSublayer(gradientLayer, at: 0)
-        } else {
-            let gradientLayer = CAGradientLayer()
-                gradientLayer.colors = [
-                    UIColor(red: 255/255, green: 87/255, blue: 171/255, alpha: 1.0).cgColor,  // Pink
-                    UIColor(red: 255/255, green: 165/255, blue: 0/255, alpha: 1.0).cgColor   // Orange
-                ]
-                gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
-                gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
-                gradientLayer.frame = view.bounds
-                view.layer.insertSublayer(gradientLayer, at: 0)
-            
-        } // Applies the correct mode
-        }
 
 }
