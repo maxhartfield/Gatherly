@@ -21,6 +21,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         updateDarkMode(darkMode: darkMode, to: view)
         navigationController?.navigationBar.tintColor = .white
         // Do any additional setup after loading the view.
+        tableView.backgroundColor = .clear
         tableView.delegate = self
         tableView.dataSource = self
         fetchUserParties()
@@ -102,15 +103,16 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.detailTextLabel?.text = party.isHost ? "Host" : "Invitee"
         cell.detailTextLabel?.textColor = .white
         
+        print(party.rsvpStatus)
         switch party.rsvpStatus {
         case "Going":
-            cell.backgroundColor = .systemGreen
+            cell.contentView.backgroundColor = .systemGreen
         case "Undecided":
-            cell.backgroundColor = .systemYellow
+            cell.contentView.backgroundColor = .systemYellow
         case "Not Going":
-            cell.backgroundColor = .systemRed
+            cell.contentView.backgroundColor = .systemRed
         default:
-            cell.backgroundColor = .systemGray
+            cell.contentView.backgroundColor = .systemGray
         }
         
         return cell
