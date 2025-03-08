@@ -61,7 +61,12 @@ class CreatePartyViewController: UIViewController {
             "time": time,
             "partyType": "General",
             "hostUid": uid,
-            "invitees": []
+            "invitees": [
+                [
+                    "uid": uid,
+                    "rsvp": "Going"
+                ]
+            ]
         ]
         
         let db = Firestore.firestore()
@@ -71,7 +76,8 @@ class CreatePartyViewController: UIViewController {
                 return
             }
             db.collection("users").document(uid).updateData([
-                "partyIdsHosting": FieldValue.arrayUnion([partyId])
+                "partyIdsHosting": FieldValue.arrayUnion([partyId]),
+                "rsvps.\(partyId)": "Going"
             ]) { error in
                 if let error = error {
                     showAlert(on: self, title: "Error", message: "Failed to update user data: \(error.localizedDescription)")

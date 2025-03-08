@@ -168,6 +168,20 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                 return
             }
             
+            let inviteeData = [
+                "uid": uid,
+                "rsvp": "Undecided"
+            ]
+
+            partyRef.updateData([
+                "invitees": FieldValue.arrayUnion([inviteeData])
+            ]) { error in
+                if let error = error {
+                    showAlert(on: self, title: "Error", message: "Failed to update invitees list: \(error.localizedDescription)")
+                }
+            }
+
+            
             userRef.getDocument { (userDoc, error) in
                 if let error = error {
                     showAlert(on: self, title: "Error", message: "Failed to check user data: \(error.localizedDescription)")
@@ -176,8 +190,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         
                 guard let userData = userDoc?.data(),
                       let partyIdsHosting = userData["partyIdsHosting"] as? [String],
-                      var partyIdsAttending = userData["partyIdsAttending"] as? [String],
-                      var rsvps = userData["rsvps"] as? [String: String] else {
+                      var partyIdsAttending = userData["partyIdsAttending"] as? [String] else {
                     showAlert(on: self, title: "Error", message: "Invalid user data format.")
                     return
                 }
@@ -193,11 +206,9 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                 }
                 
                 partyIdsAttending.append(partyId)
-                rsvps[partyId] = "Undecided"
-                
                 userRef.updateData([
                     "partyIdsAttending": partyIdsAttending,
-                    "rsvps": rsvps
+                    "rsvps.\(partyId)": "Undecided"
                 ]) { error in
                     if let error = error {
                         showAlert(on: self, title: "Error", message: "Failed to join party: \(error.localizedDescription)")
