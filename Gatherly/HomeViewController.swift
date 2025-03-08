@@ -75,7 +75,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                        let hostUid = partyData["hostUid"] as? String {
                         
                         let isHost = (hostUid == uid)
-                        let rsvpStatus = rsvps[partyId] ?? "No Response"
+                        let rsvpStatus = rsvps[partyId] ?? "Undecided"
                         
                         let party = Party(partyId: partyId, name: name, date: dateString, time: time, rsvpStatus: rsvpStatus, isHost: isHost)
                         self.parties.append(party)
@@ -105,7 +105,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         switch party.rsvpStatus {
         case "Going":
             cell.backgroundColor = .systemGreen
-        case "Maybe":
+        case "Undecided":
             cell.backgroundColor = .systemYellow
         case "Not Going":
             cell.backgroundColor = .systemRed
@@ -124,27 +124,88 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     @IBAction func joinButtonPressed(_ sender: Any) {
         let controller = UIAlertController(
-            title: "Join Party",
-            message: "Enter Party ID",
-            preferredStyle: .alert)
-        
-        controller.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        
-        controller.addTextField { (textField) in
-            textField.placeholder = "ex:123456"
-            
+           title: "Join Party",
+           message: "Enter Party ID",
+           preferredStyle: .alert
+       )
+       
+       controller.addTextField { (textField) in
+           textField.placeholder = "ex:123456"
+       }
+       
+       controller.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+       
+       controller.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+           guard let enteredPartyId = controller.textFields?.first?.text, !enteredPartyId.isEmpty else {
+               showAlert(on: self, title: "Invalid Entry", message: "Please enter a valid Party ID.")
+               return
+           }
+           
+           self.attemptToJoinParty(partyId: enteredPartyId)
+       })
+       
+       present(controller, animated: true)
+    }
+    
+    func attemptToJoinParty(partyId: String) {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            showAlert(on: self, title: "Error", message: "No user logged in.")
+            return
         }
+        let db = Firestore.firestore()
+        let partyRef = db.collection("parties").document(partyId)
+        let userRef = db.collection("users").document(uid)
+        partyRef.getDocument { (partyDoc, error) in
+            if let error = error {
+                showAlert(on: self, title: "Error", message: "Failed to check party: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let partyData = partyDoc?.data() else {
+                showAlert(on: self, title: "Party Not Found", message: "No party exists with this ID.")
+                return
+            }
+            
+            userRef.getDocument { (userDoc, error) in
+                if let error = error {
+                    showAlert(on: self, title: "Error", message: "Failed to check user data: \(error.localizedDescription)")
+                    return
+                }
         
-        controller.addAction(UIAlertAction(
-            title: "OK",
-            style: .default)
-                {(action) in
-            let enteredText = controller.textFields![0].text
-            self.partyIdEntered = enteredText
-            print(self.partyIdEntered ?? "N/A")
-        })
-        
-        present(controller,animated:true)
+                guard let userData = userDoc?.data(),
+                      let partyIdsHosting = userData["partyIdsHosting"] as? [String],
+                      var partyIdsAttending = userData["partyIdsAttending"] as? [String],
+                      var rsvps = userData["rsvps"] as? [String: String] else {
+                    showAlert(on: self, title: "Error", message: "Invalid user data format.")
+                    return
+                }
+                
+                if partyIdsHosting.contains(partyId) {
+                    showAlert(on: self, title: "Cannot Join", message: "You are already the host of this party.")
+                    return
+                }
+                
+                if partyIdsAttending.contains(partyId) {
+                    showAlert(on: self, title: "Already Joined", message: "You have already joined this party.")
+                    return
+                }
+                
+                partyIdsAttending.append(partyId)
+                rsvps[partyId] = "Undecided"
+                
+                userRef.updateData([
+                    "partyIdsAttending": partyIdsAttending,
+                    "rsvps": rsvps
+                ]) { error in
+                    if let error = error {
+                        showAlert(on: self, title: "Error", message: "Failed to join party: \(error.localizedDescription)")
+                    } else {
+                        showAlert(on: self, title: "Success", message: "You have successfully joined the party!")
+                        self.fetchUserParties()
+                    }
+                }
+            }
+        }
     }
 
 }

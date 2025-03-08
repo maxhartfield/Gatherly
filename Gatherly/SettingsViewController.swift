@@ -39,7 +39,6 @@ class SettingsViewController: UIViewController {
         do {
             try Auth.auth().signOut()
             self.performSegue(withIdentifier: self.segueIdentifier, sender:nil)
-            // CHANGE to no segue - just pop all previous screens and go back to login with no info or create a new login, otherwise a back button pops up due to the embedding in nav controller
         } catch {
             print("Sign out error")
         }
