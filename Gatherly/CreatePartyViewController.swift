@@ -82,7 +82,19 @@ class CreatePartyViewController: UIViewController {
                 if let error = error {
                     showAlert(on: self, title: "Error", message: "Failed to update user data: \(error.localizedDescription)")
                 } else {
-                    self.performSegue(withIdentifier: self.segueIdentifier, sender: nil)
+                    print("here")
+                    let alert = UIAlertController(
+                        title: "Party Created!",
+                        message: "Your Party ID: \(partyId)\n\nShare this ID with others so they can join.",
+                        preferredStyle: .alert
+                    )
+                    alert.addAction(UIAlertAction(title: "Copy", style: .default) { _ in
+                        UIPasteboard.general.string = partyId
+                    })
+                    alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+                        self.performSegue(withIdentifier: self.segueIdentifier, sender: nil)
+                    })
+                    self.present(alert, animated: true)
                 }
             }
         }
