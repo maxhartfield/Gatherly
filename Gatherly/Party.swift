@@ -10,6 +10,7 @@ import Foundation
 struct Party {
     let partyId: String
     let name: String
+    let description: String
     let date: String
     let time: String
     let rsvpStatus: String

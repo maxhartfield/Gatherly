@@ -31,6 +31,7 @@ class PartyInfoViewController: UIViewController {
         updateDarkMode(darkMode: darkMode, to: view)
         navigationController?.navigationBar.tintColor = .white
         partyName.text = party?.name
+        partyDescription.text = party?.description
         partyID.text = party?.partyId
         partyDate.text = party?.date
         partyTime.text = party?.time

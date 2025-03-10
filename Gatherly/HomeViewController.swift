@@ -71,6 +71,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                     
                     if let partyData = partyDoc?.data(),
                        let name = partyData["name"] as? String,
+                       let description = partyData["description"] as? String,
                        let dateString = partyData["date"] as? String,
                        let time = partyData["time"] as? String,
                        let hostUid = partyData["hostUid"] as? String {
@@ -78,7 +79,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                         let isHost = (hostUid == uid)
                         let rsvpStatus = rsvps[partyId] ?? "Undecided"
                         
-                        let party = Party(partyId: partyId, name: name, date: dateString, time: time, rsvpStatus: rsvpStatus, isHost: isHost)
+                        let party = Party(partyId: partyId, name: name, description: description, date: dateString, time: time, rsvpStatus: rsvpStatus, isHost: isHost)
                         self.parties.append(party)
                     }
                 }
