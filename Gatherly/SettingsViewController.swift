@@ -17,7 +17,6 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var darkModeState: UISwitch!
     
     @IBOutlet weak var logoutButton: UIButton!
-    @IBOutlet weak var submitButton: UIButton!
     @IBOutlet weak var passwordEdit: UIButton!
     @IBOutlet weak var usernameEdit: UIButton!
     override func viewDidLoad() {
@@ -25,7 +24,6 @@ class SettingsViewController: UIViewController {
         darkModeState.isOn = darkMode
         updateDarkMode(darkMode: darkMode, to: view)
         logoutButton.tintColor = .white
-        submitButton.tintColor = .white
         usernameEdit.tintColor = .white
         passwordEdit.tintColor = .white
     }
