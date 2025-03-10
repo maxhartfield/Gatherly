@@ -24,12 +24,12 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.backgroundColor = .clear
         tableView.delegate = self
         tableView.dataSource = self
-        fetchUserParties()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateDarkMode(darkMode: darkMode, to: view)
+        fetchUserParties()
     }
     
     func fetchUserParties() {
@@ -99,7 +99,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         let party = parties[indexPath.row]
         
-        cell.textLabel?.text = "\(party.name) - \(party.date) at \(party.time)"
+        cell.textLabel?.text = "\(party.name)     Date: \(party.date) at \(party.time)"
         cell.detailTextLabel?.text = party.isHost ? "Host" : "Invitee"
         cell.detailTextLabel?.textColor = .white
         
@@ -123,6 +123,17 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         print("Selected party: \(selectedParty.name), RSVP: \(selectedParty.rsvpStatus)")
         //segue
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "PartyInfoSegue" {
+            if let destinationVC = segue.destination as? PartyInfoViewController,
+               let indexPath = tableView.indexPathForSelectedRow {
+                let selectedParty = parties[indexPath.row]
+                destinationVC.party = selectedParty
+            }
+        }
+    }
+
     
     @IBAction func joinButtonPressed(_ sender: Any) {
         let controller = UIAlertController(
