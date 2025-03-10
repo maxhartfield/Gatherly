@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore
 
 class LoginViewController: UIViewController {
 
@@ -25,9 +26,11 @@ class LoginViewController: UIViewController {
         Auth.auth().addStateDidChangeListener() {
             (auth,user) in
             if user != nil {
-                self.performSegue(withIdentifier: self.segueIdentifier, sender:nil)
-                self.emailTextField.text = nil
-                self.passwordTextField.text = nil
+                self.loadUserDarkMode(uid: user!.uid) {
+                    self.performSegue(withIdentifier: self.segueIdentifier, sender: nil)
+                    self.emailTextField.text = nil
+                    self.passwordTextField.text = nil
+                }
             }
         }
     }
@@ -44,11 +47,25 @@ class LoginViewController: UIViewController {
                 (authResult,error) in
                 if let error = error as NSError? {
                     showAlert(on: self, title: "Signup Failed", message: "\(error.localizedDescription)")
-                } else {
-                    self.performSegue(withIdentifier: self.segueIdentifier, sender: nil)
+                } else if let user = authResult?.user {
+                    self.loadUserDarkMode(uid: user.uid) {
+                        self.performSegue(withIdentifier: self.segueIdentifier, sender: nil)
+                    }
                 }
         }
     }
     
+    func loadUserDarkMode(uid: String, completion: @escaping () -> Void) {
+        let db = Firestore.firestore()
+        db.collection("users").document(uid).getDocument { (document, error) in
+            if let error = error {
+                showAlert(on: self, title: "Failed to fetch dark mode setting:", message: "\(error.localizedDescription)")
+            } else if let data = document?.data(), let storedDarkMode = data["darkMode"] as? Bool {
+                darkMode = storedDarkMode
+                updateDarkMode(darkMode: darkMode, to: self.view)
+            }
+            completion()
+        }
+    }
 }
 

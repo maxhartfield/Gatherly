@@ -17,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter username..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="EtG-LP-J2z">
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter email..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="EtG-LP-J2z">
                                 <rect key="frame" x="24" y="245" width="353" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -242,7 +242,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="tintColor" red="0.77254903320000001" green="0.74117648599999997" blue="0.6549019814" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="filled" title="Edit Username">
+                                <buttonConfiguration key="configuration" style="filled" title="Edit First and Last Name">
                                     <color key="baseForegroundColor" systemColor="darkTextColor"/>
                                 </buttonConfiguration>
                                 <connections>
@@ -312,9 +312,9 @@
                     <navigationItem key="navigationItem" id="ysn-1v-uD1"/>
                     <connections>
                         <outlet property="darkModeState" destination="WGx-TH-yKj" id="J76-PF-fl1"/>
+                        <outlet property="emailEdit" destination="z5U-OH-Kf2" id="GcK-4r-xKp"/>
                         <outlet property="logoutButton" destination="6Kh-7R-L7v" id="odM-97-gMX"/>
                         <outlet property="passwordEdit" destination="Rur-eX-uIz" id="bE6-OT-qtS"/>
-                        <outlet property="usernameEdit" destination="z5U-OH-Kf2" id="GcK-4r-xKp"/>
                         <segue destination="BYZ-38-t0r" kind="presentation" identifier="LoginFromSettings" modalPresentationStyle="fullScreen" id="XcE-BM-4dc"/>
                     </connections>
                 </viewController>
