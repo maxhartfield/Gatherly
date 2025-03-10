@@ -14,7 +14,6 @@ class CreatePartyViewController: UIViewController {
     @IBOutlet weak var partyDescriptionTextField: UITextField!
     @IBOutlet weak var dateTextField: UITextField!
     @IBOutlet weak var timeTextField: UITextField!
-    var segueIdentifier = "HomeFromCreateParty"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -90,9 +89,7 @@ class CreatePartyViewController: UIViewController {
                     )
                     alert.addAction(UIAlertAction(title: "Copy", style: .default) { _ in
                         UIPasteboard.general.string = partyId
-                    })
-                    alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
-                        self.performSegue(withIdentifier: self.segueIdentifier, sender: nil)
+                        self.navigationController?.popViewController(animated: true)
                     })
                     self.present(alert, animated: true)
                 }

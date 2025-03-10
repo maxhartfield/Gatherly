@@ -43,10 +43,6 @@ class ChangePassViewController: UIViewController {
         updatePass(newpass: firstpass, oldpass: oldpass)
     }
     
-    @IBAction func cancelPressed(_ sender: Any) {
-        self.dismiss(animated: true)
-    }
-    
     func updatePass(newpass : String, oldpass: String) {
         guard let user = Auth.auth().currentUser, let email = user.email else {
             showAlert(on: self, title: "Error", message: "No user logged in.")
@@ -68,7 +64,7 @@ class ChangePassViewController: UIViewController {
                 } else {
                     let alert = UIAlertController(title: "Success", message: "Changed password successfully!", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
-                        self.dismiss(animated: true)
+                        self.navigationController?.popViewController(animated: true)
                     })
                     self.present(alert, animated: true)
                 }

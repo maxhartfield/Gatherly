@@ -39,11 +39,7 @@ class ChangeNameViewController: UIViewController {
         }
         
     }
-    
-    @IBAction func cancelPressed(_ sender: Any) {
-        self.dismiss(animated: true)
-    }
-    
+
     func fetchNames() {
         guard let uid = Auth.auth().currentUser?.uid else {
             showAlert(on: self, title: "Error", message: "No user logged in.")
@@ -88,7 +84,7 @@ class ChangeNameViewController: UIViewController {
             } else {
                 let alert = UIAlertController(title: "Success", message: "Changed name successfully!", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
-                    self.dismiss(animated: true) // Dismiss only after user taps "OK"
+                    self.navigationController?.popViewController(animated: true)
                 })
                 self.present(alert, animated: true)
             }

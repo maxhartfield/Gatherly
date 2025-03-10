@@ -397,7 +397,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="XCK-zX-Adx">
-                                <rect key="frame" x="50" y="50" width="293" height="753"/>
+                                <rect key="frame" x="50" y="94" width="293" height="709"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UserPartyCell" textLabel="nof-Ve-26H" detailTextLabel="2Rw-7U-OFP" style="IBUITableViewCellStyleSubtitle" id="IZN-rN-ukc">
@@ -597,7 +597,6 @@
                         <outlet property="partyDescriptionTextField" destination="CcY-iA-u0l" id="lhU-dk-Xe0"/>
                         <outlet property="partyNameTextField" destination="JvV-tV-td3" id="LAE-dX-oPQ"/>
                         <outlet property="timeTextField" destination="ezU-K5-YdZ" id="xnm-af-ZrT"/>
-                        <segue destination="fCY-yg-BPN" kind="presentation" identifier="HomeFromCreateParty" modalPresentationStyle="fullScreen" id="58e-Lz-RNo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="O2h-Sa-EEB" sceneMemberID="firstResponder"/>
@@ -2114,9 +2113,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="9vu-ra-lBa"/>
         <segue reference="mCh-XT-ZWI"/>
-        <segue reference="58e-Lz-RNo"/>
         <segue reference="XcE-BM-4dc"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" systemColor="labelColor"/>
