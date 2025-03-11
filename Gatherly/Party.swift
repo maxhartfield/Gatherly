@@ -13,6 +13,6 @@ struct Party {
     let description: String
     let date: String
     let time: String
-    let rsvpStatus: String
-    let isHost: Bool
+    let invitees: [String]
+    let hostUid: String
 }

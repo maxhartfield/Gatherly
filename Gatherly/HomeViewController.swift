@@ -46,21 +46,17 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
             
             guard let data = document?.data(),
-                  let partyIdsHosting = data["partyIdsHosting"] as? [String],
-                  let partyIdsAttending = data["partyIdsAttending"] as? [String],
                   let rsvps = data["rsvps"] as? [String: String] else {
                 showAlert(on: self, title: "Error", message: "Invalid user data format.")
                 return
             }
             
-            let allPartyIds = partyIdsHosting + partyIdsAttending
             self.parties.removeAll()
             
             let group = DispatchGroup()
             
-            for partyId in allPartyIds {
+            for partyId in rsvps.keys {
                 group.enter()
-                
                 Firestore.firestore().collection("parties").document(partyId).getDocument { partyDoc, error in
                     defer { group.leave() }
                     
@@ -68,18 +64,15 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                         print("Error fetching party \(partyId): \(error.localizedDescription)")
                         return
                     }
-                    
                     if let partyData = partyDoc?.data(),
                        let name = partyData["name"] as? String,
                        let description = partyData["description"] as? String,
                        let dateString = partyData["date"] as? String,
                        let time = partyData["time"] as? String,
                        let hostUid = partyData["hostUid"] as? String {
-                        
                         let isHost = (hostUid == uid)
-                        let rsvpStatus = rsvps[partyId] ?? "Undecided"
-                        
-                        let party = Party(partyId: partyId, name: name, description: description, date: dateString, time: time, rsvpStatus: rsvpStatus, isHost: isHost)
+                        let invitees = partyData["invitees"] as? [String]
+                        let party = Party(partyId: partyId, name: name, description: description, date: dateString, time: time, invitees: invitees ?? [], hostUid: hostUid)
                         self.parties.append(party)
                     }
                 }
@@ -97,34 +90,39 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
-        
         let party = parties[indexPath.row]
-        
         cell.textLabel?.text = "\(party.name)     Date: \(party.date) at \(party.time)"
-        cell.detailTextLabel?.text = party.isHost ? "Host" : "Invitee"
         cell.detailTextLabel?.textColor = .white
-        
-        print(party.rsvpStatus)
-        switch party.rsvpStatus {
-        case "Going":
-            cell.contentView.backgroundColor = .systemGreen
-        case "Undecided":
-            cell.contentView.backgroundColor = .systemYellow
-        case "Not Going":
-            cell.contentView.backgroundColor = .systemRed
-        default:
-            cell.contentView.backgroundColor = .systemGray
+        guard let user = Auth.auth().currentUser else { return cell }
+        let uid = user.uid
+        let db = Firestore.firestore()
+        cell.detailTextLabel?.text = party.hostUid == uid ? "Host" : "Invitee"
+        let userRef = db.collection("users").document(uid)
+        userRef.getDocument { (document, error) in
+            DispatchQueue.main.async {
+                if let document = document, document.exists,
+                   let rsvps = document.data()?["rsvps"] as? [String: String],
+                   let rsvpStatus = rsvps[party.partyId] {
+                    switch rsvpStatus {
+                    case "Going":
+                        cell.contentView.backgroundColor = .systemGreen
+                    case "Undecided":
+                        cell.contentView.backgroundColor = .systemYellow
+                    case "Not Going":
+                        cell.contentView.backgroundColor = .systemRed
+                    default:
+                        cell.contentView.backgroundColor = .systemGray
+                    }
+                } else {
+                    showAlert(on: self, title: "Error:", message: "No RSVP found for party \(party.partyId)")
+                }
+            }
         }
-        
         return cell
     }
+
+
         
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedParty = parties[indexPath.row]
-        print("Selected party: \(selectedParty.name), RSVP: \(selectedParty.rsvpStatus)")
-        //segue
-    }
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "PartyInfoSegue" {
             if let destinationVC = segue.destination as? PartyInfoViewController,
@@ -179,14 +177,8 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                 showAlert(on: self, title: "Party Not Found", message: "No party exists with this ID.")
                 return
             }
-            
-            let inviteeData = [
-                "uid": uid,
-                "rsvp": "Undecided"
-            ]
-
             partyRef.updateData([
-                "invitees": FieldValue.arrayUnion([inviteeData])
+                "invitees": FieldValue.arrayUnion([uid])
             ]) { error in
                 if let error = error {
                     showAlert(on: self, title: "Error", message: "Failed to update invitees list: \(error.localizedDescription)")
@@ -199,27 +191,16 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                     showAlert(on: self, title: "Error", message: "Failed to check user data: \(error.localizedDescription)")
                     return
                 }
-        
                 guard let userData = userDoc?.data(),
-                      let partyIdsHosting = userData["partyIdsHosting"] as? [String],
-                      var partyIdsAttending = userData["partyIdsAttending"] as? [String] else {
+                      let rsvps = userData["rsvps"] as? [String: String] else {
                     showAlert(on: self, title: "Error", message: "Invalid user data format.")
                     return
                 }
-                
-                if partyIdsHosting.contains(partyId) {
-                    showAlert(on: self, title: "Cannot Join", message: "You are already the host of this party.")
-                    return
-                }
-                
-                if partyIdsAttending.contains(partyId) {
+                if rsvps[partyId] != nil {
                     showAlert(on: self, title: "Already Joined", message: "You have already joined this party.")
                     return
                 }
-                
-                partyIdsAttending.append(partyId)
                 userRef.updateData([
-                    "partyIdsAttending": partyIdsAttending,
                     "rsvps.\(partyId)": "Undecided"
                 ]) { error in
                     if let error = error {

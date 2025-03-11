@@ -1073,9 +1073,40 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="fO0-H4-ReX">
+                                <rect key="frame" x="50" y="394" width="293" height="409"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="InviteeCell" textLabel="v7x-dC-dUN" style="IBUITableViewCellStyleDefault" id="Nk2-Wf-AqB">
+                                        <rect key="frame" x="0.0" y="50" width="293" height="43.666667938232422"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Nk2-Wf-AqB" id="X9o-vl-La6">
+                                            <rect key="frame" x="0.0" y="0.0" width="293" height="43.666667938232422"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Thanksgiving Potluck!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="v7x-dC-dUN">
+                                                    <rect key="frame" x="16" y="0.0" width="261" height="43.666667938232422"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" systemColor="systemGreenColor"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <sections/>
+                            </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Ze0-Rb-dL4"/>
                         <color key="backgroundColor" red="0.40392160420000001" green="0.49803921579999999" blue="0.49019610879999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <constraints>
+                            <constraint firstItem="Ze0-Rb-dL4" firstAttribute="trailing" secondItem="fO0-H4-ReX" secondAttribute="trailing" constant="50" id="FTQ-I5-Ihf"/>
+                            <constraint firstItem="fO0-H4-ReX" firstAttribute="top" secondItem="Ze0-Rb-dL4" secondAttribute="top" constant="350" id="KcD-7e-OUB"/>
+                            <constraint firstItem="fO0-H4-ReX" firstAttribute="leading" secondItem="Ze0-Rb-dL4" secondAttribute="leading" constant="50" id="WgI-UV-GMU"/>
+                            <constraint firstItem="fO0-H4-ReX" firstAttribute="bottom" secondItem="Ze0-Rb-dL4" secondAttribute="bottom" id="v17-Um-1Vd"/>
+                        </constraints>
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="Waj-yl-aoc"/>
@@ -1086,6 +1117,7 @@
                         <outlet property="partyID" destination="OYF-GN-zVf" id="m4T-hP-BTp"/>
                         <outlet property="partyName" destination="81i-dL-AGu" id="Q0f-pC-9GL"/>
                         <outlet property="partyTime" destination="u19-s5-LM2" id="kFk-hS-4YJ"/>
+                        <outlet property="tableView" destination="fO0-H4-ReX" id="tJ8-K6-3DP"/>
                         <segue destination="KAz-NT-Bab" kind="show" identifier="Wishlist" id="6Gp-Er-fA0"/>
                         <segue destination="E5Z-Jm-yst" kind="show" identifier="Potluck" id="9zF-5h-nnz"/>
                     </connections>

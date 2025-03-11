@@ -81,8 +81,6 @@ class CreateAccountViewController: UIViewController {
                 "firstName": firstName,
                 "lastName": lastName,
                 "email": email,
-                "partyIdsHosting": [],
-                "partyIdsAttending": [],
                 "rsvps": [:],
                 "darkMode": true
             ]

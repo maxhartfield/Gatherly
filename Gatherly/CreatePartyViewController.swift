@@ -60,12 +60,7 @@ class CreatePartyViewController: UIViewController {
             "time": time,
             "partyType": "General",
             "hostUid": uid,
-            "invitees": [
-                [
-                    "uid": uid,
-                    "rsvp": "Going"
-                ]
-            ]
+            "invitees": [uid]
         ]
         
         let db = Firestore.firestore()
@@ -75,13 +70,11 @@ class CreatePartyViewController: UIViewController {
                 return
             }
             db.collection("users").document(uid).updateData([
-                "partyIdsHosting": FieldValue.arrayUnion([partyId]),
                 "rsvps.\(partyId)": "Going"
             ]) { error in
                 if let error = error {
                     showAlert(on: self, title: "Error", message: "Failed to update user data: \(error.localizedDescription)")
                 } else {
-                    print("here")
                     let alert = UIAlertController(
                         title: "Party Created!",
                         message: "Your Party ID: \(partyId)\n\nShare this ID with others so they can join.",
