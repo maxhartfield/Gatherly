@@ -1024,7 +1024,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="fO0-H4-ReX">
-                                <rect key="frame" x="50" y="394" width="293" height="409"/>
+                                <rect key="frame" x="50" y="444" width="293" height="359"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="InviteeCell" textLabel="v7x-dC-dUN" style="IBUITableViewCellStyleDefault" id="Nk2-Wf-AqB">
@@ -1084,7 +1084,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="RSVP Info" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HfC-ss-ezY">
-                                <rect key="frame" x="16" y="360" width="85" height="26"/>
+                                <rect key="frame" x="154" y="410" width="85" height="26"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="MarkerFelt-Wide" family="Marker Felt" pointSize="20"/>
                                 <nil key="textColor"/>
@@ -1111,12 +1111,25 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="hRm-Vc-3Ne">
+                                <rect key="frame" x="66" y="371" width="260" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <segments>
+                                    <segment title="Going"/>
+                                    <segment title="Not Going"/>
+                                    <segment title="Undecided"/>
+                                </segments>
+                                <connections>
+                                    <action selector="rsvpChanged:" destination="nhk-i1-va5" eventType="valueChanged" id="Ndm-Q4-XQU"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Ze0-Rb-dL4"/>
                         <color key="backgroundColor" red="0.40392160420000001" green="0.49803921579999999" blue="0.49019610879999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="Ze0-Rb-dL4" firstAttribute="trailing" secondItem="fO0-H4-ReX" secondAttribute="trailing" constant="50" id="FTQ-I5-Ihf"/>
-                            <constraint firstItem="fO0-H4-ReX" firstAttribute="top" secondItem="Ze0-Rb-dL4" secondAttribute="top" constant="350" id="KcD-7e-OUB"/>
+                            <constraint firstItem="fO0-H4-ReX" firstAttribute="top" secondItem="Ze0-Rb-dL4" secondAttribute="top" constant="400" id="KcD-7e-OUB"/>
                             <constraint firstItem="fO0-H4-ReX" firstAttribute="leading" secondItem="Ze0-Rb-dL4" secondAttribute="leading" constant="50" id="WgI-UV-GMU"/>
                             <constraint firstItem="fO0-H4-ReX" firstAttribute="bottom" secondItem="Ze0-Rb-dL4" secondAttribute="bottom" id="v17-Um-1Vd"/>
                         </constraints>
@@ -1130,6 +1143,7 @@
                         <outlet property="partyID" destination="OYF-GN-zVf" id="m4T-hP-BTp"/>
                         <outlet property="partyName" destination="81i-dL-AGu" id="Q0f-pC-9GL"/>
                         <outlet property="partyTime" destination="u19-s5-LM2" id="kFk-hS-4YJ"/>
+                        <outlet property="rsvpSelector" destination="hRm-Vc-3Ne" id="OCZ-QP-gCr"/>
                         <outlet property="tableView" destination="fO0-H4-ReX" id="tJ8-K6-3DP"/>
                         <segue destination="KAz-NT-Bab" kind="show" identifier="Wishlist" id="6Gp-Er-fA0"/>
                         <segue destination="E5Z-Jm-yst" kind="show" identifier="Potluck" id="9zF-5h-nnz"/>
