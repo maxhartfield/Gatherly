@@ -21,9 +21,10 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var partyTime: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var rsvpSelector: UISegmentedControl!
-    
+    @IBOutlet weak var editButton: UIBarButtonItem!
     
     let cellIdentifier = "InviteeCell"
+    let segueToEdit = "EditParty"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,6 +82,8 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
                let hostUid = partyData["hostUid"] as? String {
                 if (hostUid == uid) {
                     self.rsvpSelector.isHidden = true
+                } else {
+                    self.editButton.isHidden = true
                 }
             }
 
@@ -201,5 +204,14 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
          
          return cell
      }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "EditParty" {
+            if let editPartyVC = segue.destination as? EditPartyViewController {
+                editPartyVC.party = self.party
+            }
+        }
+    }
+
 
 }
