@@ -10,7 +10,7 @@ import FirebaseFirestore
 import FirebaseAuth
 
 
-class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, PartyUpdater {
     var party: Party?
     var invitees: [User] = []
     var rsvps : [String : String] = [:]
@@ -209,9 +209,16 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
         if segue.identifier == "EditParty" {
             if let editPartyVC = segue.destination as? EditPartyViewController {
                 editPartyVC.party = self.party
+                editPartyVC.delegate = self
             }
         }
     }
 
-
+    func updateParty(_ updatedParty: Party) {
+        self.party = updatedParty
+        self.partyName.text = updatedParty.name
+        self.partyDescription.text = updatedParty.description
+        self.partyDate.text = updatedParty.date
+        self.partyTime.text = updatedParty.time
+    }
 }
