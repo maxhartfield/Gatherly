@@ -21,5 +21,8 @@
 			</array>
 		</dict>
 	</dict>
+
+	<key>NSCalendarsUsageDescription</key>
+	<string>This app needs calendar access to add your parties to your calendar.</string>
 </dict>
 </plist>

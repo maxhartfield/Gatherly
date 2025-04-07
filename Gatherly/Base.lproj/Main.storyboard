@@ -272,9 +272,12 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tc9-J1-b3A">
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Tc9-J1-b3A">
                                 <rect key="frame" x="255" y="487" width="49" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="notificationsPressed:" destination="MIB-5O-oi1" eventType="valueChanged" id="sPc-Wx-T0C"/>
+                                </connections>
                             </switch>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Notifications" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5pI-T6-C8B">
                                 <rect key="frame" x="60" y="492" width="142" height="21"/>
@@ -319,6 +322,7 @@
                         <outlet property="darkModeState" destination="WGx-TH-yKj" id="J76-PF-fl1"/>
                         <outlet property="emailEdit" destination="z5U-OH-Kf2" id="GcK-4r-xKp"/>
                         <outlet property="logoutButton" destination="6Kh-7R-L7v" id="odM-97-gMX"/>
+                        <outlet property="notificationsState" destination="Tc9-J1-b3A" id="nZn-mS-OTz"/>
                         <outlet property="passwordEdit" destination="Rur-eX-uIz" id="bE6-OT-qtS"/>
                         <segue destination="BYZ-38-t0r" kind="presentation" identifier="LoginFromSettings" modalPresentationStyle="fullScreen" id="XcE-BM-4dc"/>
                     </connections>

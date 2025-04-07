@@ -82,7 +82,8 @@ class CreateAccountViewController: UIViewController {
                 "lastName": lastName,
                 "email": email,
                 "rsvps": [:],
-                "darkMode": true
+                "darkMode": true,
+                "calendarEnabled": false
             ]
             Firestore.firestore().collection("users").document(uid).setData(userData) { error in
                 if let error = error {

@@ -1,25 +1,17 @@
-//
-//  CreatePartyViewController.swift
-//  Gatherly
-//
-//  Created by Samika Iyer on 3/7/25.
-//
-
 import UIKit
 import FirebaseFirestore
 import FirebaseAuth
+import EventKit
 
 class CreatePartyViewController: UIViewController {
     @IBOutlet weak var partyNameTextField: UITextField!
     @IBOutlet weak var partyDescriptionTextField: UITextField!
     @IBOutlet weak var dateTimePicker: UIDatePicker!
-    @IBOutlet weak var timeTextField: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         updateDarkMode(darkMode: darkMode, to: view)
         dateTimePicker.minimumDate = Date()
-        // Do any additional setup after loading the view.
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -76,6 +68,7 @@ class CreatePartyViewController: UIViewController {
                 if let error = error {
                     showAlert(on: self, title: "Error", message: "Failed to update user data: \(error.localizedDescription)")
                 } else {
+                    self.addPartyToCalendar(name: name, description: description, startDate: selectedDate)
                     let alert = UIAlertController(
                         title: "Party Created!",
                         message: "Your Party ID: \(partyId)\n\nShare this ID with others so they can join.",
@@ -87,6 +80,26 @@ class CreatePartyViewController: UIViewController {
                     })
                     self.present(alert, animated: true)
                 }
+            }
+        }
+    }
+
+    func addPartyToCalendar(name: String, description: String, startDate: Date) {
+        let eventStore = EKEventStore()
+        let status = EKEventStore.authorizationStatus(for: .event)
+        if (status == .fullAccess || status == .writeOnly) && calendarEnabled {
+            let event = EKEvent(eventStore: eventStore)
+            event.title = name
+            event.notes = description
+            event.startDate = startDate
+            event.endDate = startDate.addingTimeInterval(15)
+            event.calendar = eventStore.defaultCalendarForNewEvents
+            let alarm = EKAlarm(relativeOffset: -3600)
+            event.addAlarm(alarm)
+            do {
+                try eventStore.save(event, span: .thisEvent)
+            } catch {
+                print("Failed to save calendar event: \(error)")
             }
         }
     }

@@ -14,4 +14,5 @@ struct User {
     let email: String
     let rsvps: [String: String]
     let darkMode: Bool
+    let calendarEnabled: Bool
 }

@@ -164,9 +164,9 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
                     let lastName = data["lastName"] as? String,
                     let email = data["email"] as? String,
                     let rsvps = data["rsvps"] as? [String: String],
-                    let darkMode = data["darkMode"] as? Bool {
-                     
-                     let user = User(uid: uid, firstName: firstName, lastName: lastName, email: email, rsvps: rsvps, darkMode: darkMode)
+                    let darkMode = data["darkMode"] as? Bool,
+                    let calendarEnabled = data["calendarEnabled"] as? Bool {
+                     let user = User(uid: uid, firstName: firstName, lastName: lastName, email: email, rsvps: rsvps, darkMode: darkMode, calendarEnabled: calendarEnabled)
                      self.invitees.append(user)
                  }
              }

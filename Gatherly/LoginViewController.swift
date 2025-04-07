@@ -60,8 +60,9 @@ class LoginViewController: UIViewController {
         db.collection("users").document(uid).getDocument { (document, error) in
             if let error = error {
                 showAlert(on: self, title: "Failed to fetch dark mode setting:", message: "\(error.localizedDescription)")
-            } else if let data = document?.data(), let storedDarkMode = data["darkMode"] as? Bool {
+            } else if let data = document?.data(), let storedDarkMode = data["darkMode"] as? Bool, let storedCalendarEnabled = data["calendarEnabled"] as? Bool {
                 darkMode = storedDarkMode
+                calendarEnabled = storedCalendarEnabled
                 updateDarkMode(darkMode: darkMode, to: self.view)
             }
             completion()
