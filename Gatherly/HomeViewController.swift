@@ -91,7 +91,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
         let party = parties[indexPath.row]
-        cell.textLabel?.text = "\(party.name)     Date: \(party.date) at \(party.time)"
+        cell.textLabel?.text = "\(party.name)     Date: \(party.date)"
         cell.detailTextLabel?.textColor = .white
         guard let user = Auth.auth().currentUser else { return cell }
         let uid = user.uid

@@ -1,59 +1,62 @@
-//
-//  EditPartyViewController.swift
-//  Gatherly
-//
-//  Created by Samika Iyer on 3/12/25.
-//
-
 import UIKit
 import FirebaseFirestore
 
 class EditPartyViewController: UIViewController {
     
     var party: Party?
-
+    
+    @IBOutlet weak var dateTimePicker: UIDatePicker!
     @IBOutlet weak var partyName: UITextField!
     @IBOutlet weak var partyDescription: UITextField!
-    @IBOutlet weak var partyDate: UITextField!
-    @IBOutlet weak var partyTime: UITextField!
     var delegate: PartyUpdater!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         updateDarkMode(darkMode: darkMode, to: view)
         navigationController?.navigationBar.tintColor = .white
+
         partyName.text = party?.name
         partyDescription.text = party?.description
-        partyDate.text = party?.date
-        partyTime.text = party?.time
+        if let dateString = party?.date,
+           let timeString = party?.time {
+
+            let combinedFormatter = DateFormatter()
+            combinedFormatter.dateFormat = "yyyy-MM-dd h:mm a"
+            combinedFormatter.locale = Locale(identifier: "en_US_POSIX")
+            if let combinedDate = combinedFormatter.date(from: "\(dateString) \(timeString)") {
+                dateTimePicker.date = combinedDate
+            }
+        }
+        dateTimePicker.minimumDate = Date()
     }
     
     @IBAction func onSubmitPressed(_ sender: Any) {
         guard let partyId = party?.partyId,
               let updatedName = partyName.text, !updatedName.isEmpty,
-              let updatedDescription = partyDescription.text, !updatedDescription.isEmpty,
-              let updatedDate = partyDate.text, !updatedDate.isEmpty,
-              let updatedTime = partyTime.text, !updatedTime.isEmpty else {
+              let updatedDescription = partyDescription.text, !updatedDescription.isEmpty else {
             showAlert(on: self, title: "Error", message: "Please fill in all fields before submitting.")
             return
         }
 
+        let selectedDate = dateTimePicker.date
+
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        
-        guard dateFormatter.date(from: updatedDate) != nil else {
-            showAlert(on: self, title: "Invalid Date", message: "Please enter the date in yyyy-MM-dd format.")
-            return
-        }
-        
+        let formattedDate = dateFormatter.string(from: selectedDate)
+
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "h:mm a"
+        timeFormatter.locale = Locale(identifier: "en_US_POSIX")
+        let formattedTime = timeFormatter.string(from: selectedDate)
+
         let db = Firestore.firestore()
-        
+
         db.collection("parties").document(partyId).updateData([
             "name": updatedName,
             "description": updatedDescription,
-            "date": updatedDate,
-            "time": updatedTime
+            "date": formattedDate,
+            "time": formattedTime
         ]) { error in
             if let error = error {
                 showAlert(on: self, title: "Error", message: "Failed to update party: \(error.localizedDescription)")
@@ -61,8 +64,8 @@ class EditPartyViewController: UIViewController {
                 showAlert(on: self, title: "Success", message: "Party details updated!") {
                     self.party?.name = updatedName
                     self.party?.description = updatedDescription
-                    self.party?.date = updatedDate
-                    self.party?.time = updatedTime
+                    self.party?.date = formattedDate
+                    self.party?.time = formattedTime
                     if let updatedParty = self.party {
                         self.delegate?.updateParty(updatedParty)
                     }
@@ -71,7 +74,7 @@ class EditPartyViewController: UIViewController {
             }
         }
     }
-    
+
     @IBAction func onDeletePressed(_ sender: Any) {
         let alert = UIAlertController(title: "Confirm Deletion",
                                       message: "Are you sure you want to delete this party? This action cannot be undone.",
@@ -85,7 +88,7 @@ class EditPartyViewController: UIViewController {
 
         present(alert, animated: true, completion: nil)
     }
-    
+
     func deleteParty() {
         guard let partyId = party?.partyId else { return }
         let db = Firestore.firestore()
@@ -96,20 +99,20 @@ class EditPartyViewController: UIViewController {
                 showAlert(on: self, title: "Error", message: "Failed to retrieve party data: \(error.localizedDescription)")
                 return
             }
-            
+
             guard let data = document?.data(),
                   let invitees = data["invitees"] as? [String] else {
                 showAlert(on: self, title: "Error", message: "Invalid party data.")
                 return
             }
-            
+
             let batch = db.batch()
-            
+
             for inviteeUid in invitees {
                 let userRef = db.collection("users").document(inviteeUid)
                 batch.updateData(["rsvps.\(partyId)": FieldValue.delete()], forDocument: userRef)
             }
-            
+
             batch.deleteDocument(partyRef)
             batch.commit { error in
                 if let error = error {
