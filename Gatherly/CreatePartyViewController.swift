@@ -90,7 +90,7 @@ class CreatePartyViewController: UIViewController {
                 if let error = error {
                     showAlert(on: self, title: "Error", message: "Failed to update user data: \(error.localizedDescription)")
                 } else {
-                    self.addPartyToCalendar(name: name, description: description, startDate: selectedDate)
+                    self.addPartyToCalendar(name: name, description: description, startDate: selectedDate, partyId: partyId)
                     let alert = UIAlertController(
                         title: "Party Created!",
                         message: "Your Party ID: \(partyId)\n\nShare this ID with others so they can join.",
@@ -106,9 +106,10 @@ class CreatePartyViewController: UIViewController {
         }
     }
 
-    func addPartyToCalendar(name: String, description: String, startDate: Date) {
+    func addPartyToCalendar(name: String, description: String, startDate: Date, partyId: String) {
         let eventStore = EKEventStore()
         let status = EKEventStore.authorizationStatus(for: .event)
+
         if (status == .fullAccess || status == .writeOnly) && calendarEnabled {
             let event = EKEvent(eventStore: eventStore)
             event.title = name
@@ -118,11 +119,30 @@ class CreatePartyViewController: UIViewController {
             event.calendar = eventStore.defaultCalendarForNewEvents
             let alarm = EKAlarm(relativeOffset: -3600)
             event.addAlarm(alarm)
+
             do {
                 try eventStore.save(event, span: .thisEvent)
+
+                if let eventId = event.eventIdentifier {
+                    let db = Firestore.firestore()
+                    db.collection("parties").document(partyId).updateData([
+                        "calendarEventId": eventId
+                    ]) { error in
+                        if let error = error {
+                            print("Failed to save event ID to Firestore: \(error.localizedDescription)")
+                        } else {
+                            print("Event ID saved to Firestore.")
+                        }
+                    }
+                } else {
+                    print("Event ID is nil, not saving to Firestore.")
+                }
+
             } catch {
                 print("Failed to save calendar event: \(error)")
             }
         }
     }
+
+
 }

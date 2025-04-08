@@ -1,4 +1,5 @@
 import UIKit
+import EventKit
 import FirebaseFirestore
 
 class EditPartyViewController: UIViewController {
@@ -61,6 +62,21 @@ class EditPartyViewController: UIViewController {
             if let error = error {
                 showAlert(on: self, title: "Error", message: "Failed to update party: \(error.localizedDescription)")
             } else {
+                if calendarEnabled {
+                    let eventStore = EKEventStore()
+                    let status = EKEventStore.authorizationStatus(for: .event)
+                    if (status == .fullAccess || status == .writeOnly),
+                       let eventId = self.party?.calendarEventId {
+                        self.updatePartyInCalendar(
+                            eventId: eventId,
+                            newName: updatedName,
+                            newDescription: updatedDescription,
+                            newStartDate: selectedDate)
+                    } else {
+                        print("Calendar access not granted or event ID is missing.")
+                    }
+                }
+                self.updateInviteesCalendar(partyId: partyId, newName: updatedName, newDescription: updatedDescription, newStartDate: selectedDate)
                 showAlert(on: self, title: "Success", message: "Party details updated!") {
                     self.party?.name = updatedName
                     self.party?.description = updatedDescription
@@ -74,6 +90,29 @@ class EditPartyViewController: UIViewController {
             }
         }
     }
+    
+    func updatePartyInCalendar(eventId: String, newName: String, newDescription: String, newStartDate: Date) {
+        let eventStore = EKEventStore()
+        if let event = eventStore.event(withIdentifier: eventId) {
+            event.title = newName
+            event.notes = newDescription
+            event.startDate = newStartDate
+            event.endDate = newStartDate.addingTimeInterval(15)
+            event.alarms?.removeAll()
+            event.addAlarm(EKAlarm(relativeOffset: -3600))
+
+            do {
+                try eventStore.save(event, span: .thisEvent)
+                print("Calendar event updated")
+            } catch {
+                print("Failed to update calendar event: \(error)")
+            }
+        } else {
+            print("No event found with ID: \(eventId)")
+        }
+    }
+
+
 
     @IBAction func onDeletePressed(_ sender: Any) {
         let alert = UIAlertController(title: "Confirm Deletion",
@@ -105,12 +144,33 @@ class EditPartyViewController: UIViewController {
                 showAlert(on: self, title: "Error", message: "Invalid party data.")
                 return
             }
+            
+            if calendarEnabled,
+                let eventId = data["calendarEventId"] as? String {
+                let status = EKEventStore.authorizationStatus(for: .event)
+                if status == .fullAccess || status == .writeOnly {
+                    self.deletePartyFromCalendar(eventId: eventId)
+                }
+            }
 
             let batch = db.batch()
 
             for inviteeUid in invitees {
                 let userRef = db.collection("users").document(inviteeUid)
-                batch.updateData(["rsvps.\(partyId)": FieldValue.delete()], forDocument: userRef)
+                userRef.getDocument { (userDoc, error) in
+                    if let error = error {
+                        print("Error retrieving user data: \(error.localizedDescription)")
+                        return
+                    }
+                    guard let userData = userDoc?.data() else {
+                        print("Invalid user data format.")
+                        return
+                    }
+                    if let eventId = userData["calendarEventId"] as? String {
+                        self.removeInviteeFromCalendar(eventId: eventId)
+                    }
+                    batch.updateData(["rsvps.\(partyId)": FieldValue.delete()], forDocument: userRef)
+                }
             }
 
             batch.deleteDocument(partyRef)
@@ -125,4 +185,90 @@ class EditPartyViewController: UIViewController {
             }
         }
     }
+    
+    func deletePartyFromCalendar(eventId: String) {
+        let eventStore = EKEventStore()
+        if let event = eventStore.event(withIdentifier: eventId) {
+            do {
+                try eventStore.remove(event, span: .thisEvent)
+                print("Calendar event deleted")
+            } catch {
+                print("Failed to delete calendar event: \(error)")
+            }
+        } else {
+            print("No calendar event found with that ID")
+        }
+    }
+    
+    func removeInviteeFromCalendar(eventId: String) {
+        let eventStore = EKEventStore()
+        if let event = eventStore.event(withIdentifier: eventId) {
+            do {
+                try eventStore.remove(event, span: .thisEvent)
+                print("Invitee's calendar event deleted")
+            } catch {
+                print("Failed to delete invitee's calendar event: \(error)")
+            }
+        } else {
+            print("No invitee calendar event found with that ID")
+        }
+    }
+    
+    func updateInviteesCalendar(partyId: String, newName: String, newDescription: String, newStartDate: Date) {
+        let db = Firestore.firestore()
+        let partyRef = db.collection("parties").document(partyId)
+
+        partyRef.getDocument { (partyDoc, error) in
+            if let error = error {
+                print("Error retrieving party data for invitees: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let partyData = partyDoc?.data(),
+                  let invitees = partyData["invitees"] as? [String] else {
+                print("Invalid party data format.")
+                return
+            }
+            for inviteeUid in invitees {
+                let userRef = db.collection("users").document(inviteeUid)
+                userRef.getDocument { (userDoc, error) in
+                    if let error = error {
+                        print("Error retrieving user data: \(error.localizedDescription)")
+                        return
+                    }
+
+                    guard let userData = userDoc?.data() else {
+                        print("Invalid user data format.")
+                        return
+                    }
+
+                    if let eventId = userData["calendarEventId"] as? String {
+                        self.updateInviteeCalendar(eventId: eventId, newName: newName, newDescription: newDescription, newStartDate: newStartDate)
+                    }
+                }
+            }
+        }
+    }
+
+    func updateInviteeCalendar(eventId: String, newName: String, newDescription: String, newStartDate: Date) {
+        let eventStore = EKEventStore()
+        if let event = eventStore.event(withIdentifier: eventId) {
+            event.title = newName
+            event.notes = newDescription
+            event.startDate = newStartDate
+            event.endDate = newStartDate.addingTimeInterval(15)
+            event.alarms?.removeAll()
+            event.addAlarm(EKAlarm(relativeOffset: -3600))
+
+            do {
+                try eventStore.save(event, span: .thisEvent)
+                print("Invitee's calendar event updated")
+            } catch {
+                print("Failed to update invitee's calendar event: \(error)")
+            }
+        } else {
+            print("No invitee calendar event found with ID: \(eventId)")
+        }
+    }
+
 }

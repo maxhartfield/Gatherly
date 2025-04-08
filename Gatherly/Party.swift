@@ -17,4 +17,5 @@ struct Party {
     var invitees: [String]
     var hostUid: String
     var assignments: [String: String]?
+    var calendarEventId: String?
 }

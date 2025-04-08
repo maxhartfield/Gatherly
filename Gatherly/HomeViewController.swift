@@ -8,6 +8,7 @@
 import UIKit
 import FirebaseFirestore
 import FirebaseAuth
+import EventKit
 
 class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource  {
     
@@ -209,8 +210,61 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                     } else {
                         showAlert(on: self, title: "Success", message: "You have successfully joined the party!")
                         self.fetchUserParties()
+                        if let partyDateString = partyData["date"] as? String,
+                            let partyTimeString = partyData["time"] as? String,
+                            let partyDate = self.parseDate(dateString: partyDateString, timeString: partyTimeString) {
+                                self.addPartyToCalendar(name: partyData["name"] as! String,
+                                description: partyData["description"] as! String, startDate: partyDate, partyId: partyId)
+                                }
                     }
                 }
+            }
+        }
+    }
+    
+    func parseDate(dateString: String, timeString: String) -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd h:mm a"
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        
+        let dateTimeString = "\(dateString) \(timeString)"
+        return dateFormatter.date(from: dateTimeString)
+    }
+    
+    func addPartyToCalendar(name: String, description: String, startDate: Date, partyId: String) {
+        let eventStore = EKEventStore()
+        let status = EKEventStore.authorizationStatus(for: .event)
+
+        if (status == .fullAccess || status == .writeOnly) && calendarEnabled {
+            let event = EKEvent(eventStore: eventStore)
+            event.title = name
+            event.notes = description
+            event.startDate = startDate
+            event.endDate = startDate.addingTimeInterval(15)
+            event.calendar = eventStore.defaultCalendarForNewEvents
+            let alarm = EKAlarm(relativeOffset: -3600)
+            event.addAlarm(alarm)
+
+            do {
+                try eventStore.save(event, span: .thisEvent)
+
+                if let eventId = event.eventIdentifier {
+                    let db = Firestore.firestore()
+                    db.collection("parties").document(partyId).updateData([
+                        "calendarEventId": eventId
+                    ]) { error in
+                        if let error = error {
+                            print("Failed to save event ID to Firestore: \(error.localizedDescription)")
+                        } else {
+                            print("Event ID saved to Firestore.")
+                        }
+                    }
+                } else {
+                    print("Event ID is nil, not saving to Firestore.")
+                }
+
+            } catch {
+                print("Failed to save calendar event: \(error)")
             }
         }
     }
