@@ -7,6 +7,7 @@ class CreatePartyViewController: UIViewController {
     @IBOutlet weak var partyNameTextField: UITextField!
     @IBOutlet weak var partyDescriptionTextField: UITextField!
     @IBOutlet weak var dateTimePicker: UIDatePicker!
+    @IBOutlet weak var partyTypeButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,6 +18,26 @@ class CreatePartyViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateDarkMode(darkMode: darkMode, to: view)
+    }
+    
+    @IBAction func partyTypePressed(_ sender: Any) {
+        print("hgere")
+        let generalAction = UIAction(title: "General", image: nil) { [weak self] action in
+            self?.partyTypeButton.setTitle("General", for: .normal)
+        }
+        let secretSantaAction = UIAction(title: "Secret Santa", image: nil) { [weak self] action in
+            self?.partyTypeButton.setTitle("Secret Santa", for: .normal)
+        }
+        let potluckAction = UIAction(title: "Potluck", image: nil) { [weak self] action in
+            self?.partyTypeButton.setTitle("Potluck", for: .normal)
+        }
+
+        let menu = UIMenu(title: "Select Party Type", options: .displayInline, children: [
+            generalAction, secretSantaAction, potluckAction
+        ])
+
+        partyTypeButton.menu = menu
+        partyTypeButton.showsMenuAsPrimaryAction = true
     }
     
     @IBAction func createPartyButtonPressed(_ sender: Any) {
@@ -43,6 +64,7 @@ class CreatePartyViewController: UIViewController {
         let timeString = timeFormatter.string(from: selectedDate)
 
         let partyId = UUID().uuidString
+        let partyType = partyTypeButton.title(for: .normal)
 
         let partyData: [String: Any] = [
             "partyId": partyId,
@@ -50,7 +72,7 @@ class CreatePartyViewController: UIViewController {
             "description": description,
             "date": dateString,
             "time": timeString,
-            "partyType": "General",
+            "partyType": partyType!,
             "hostUid": uid,
             "invitees": [uid]
         ]

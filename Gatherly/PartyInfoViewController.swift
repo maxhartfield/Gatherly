@@ -23,6 +23,10 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var rsvpSelector: UISegmentedControl!
     @IBOutlet weak var editButton: UIBarButtonItem!
     
+    @IBOutlet weak var assignButton: UIButton!
+    @IBOutlet weak var createWishlistButton: UIButton!
+    @IBOutlet weak var viewWishlistButton: UIButton!
+    
     let cellIdentifier = "InviteeCell"
     let segueToEdit = "EditParty"
     
@@ -38,6 +42,14 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.backgroundColor = .clear
         tableView.delegate = self
         tableView.dataSource = self
+        viewWishlistButton.isHidden = true
+        createWishlistButton.isHidden = true
+        assignButton.isHidden = true
+        if let partyType = party?.partyType, partyType == "Secret Santa"{
+            view.backgroundColor = UIColor(red: 0.95, green: 0.88, blue: 0.73, alpha: 1.0)
+            viewWishlistButton.isHidden = false
+            createWishlistButton.isHidden = false
+        }
         fetchInvitees()
         initRsvp()
         
@@ -46,6 +58,54 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateDarkMode(darkMode: darkMode, to: view)
+    }
+    
+    @IBAction func createWishlistPressed(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let createWishlistVC = storyboard.instantiateViewController(withIdentifier: "SecretSantaViewController") as? SecretSantaViewController {
+            //createWishlistVC.party = self.party
+            self.navigationController?.pushViewController(createWishlistVC, animated: true)
+        }
+    }
+    
+    @IBAction func receiverWishlistPressed(_ sender: Any) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else { return }
+        guard let receiverUID = party?.assignments?[currentUserID] else {
+            showAlert(on: self, title: "No Assignment", message: "You haven't been assigned a recipient yet.")
+            return
+        }
+        let db = Firestore.firestore()
+        db.collection("parties").document(party!.partyId)
+                .collection("wishlists").document(receiverUID)
+                .getDocument { document, error in
+                    if let error = error {
+                        let message = "Failed to fetch wishlist"
+                        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .default))
+                        self.present(alert, animated: true)
+                        return
+                    }
+                    
+                    var message: String
+                    if let document = document, document.exists,
+                       let data = document.data() {
+                        if let wishlistItems = data["wishlist"] as? [String] {
+                            message = wishlistItems.joined(separator: "\n")
+                        } else if let wishlistText = data["wishlist"] as? String {
+                            message = wishlistText
+                        } else {
+                            message = "No wishlist items found."
+                        }
+                    } else {
+                        message = "Your recipient hasn't submitted a wishlist yet."
+                    }
+                    
+                    let alert = UIAlertController(title: "Recipient Wishlist", message: message, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    DispatchQueue.main.async {
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                }
     }
     
     @IBAction func rsvpChanged(_ sender: Any) {
@@ -65,6 +125,21 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
         
     }
     
+    @IBAction func assignPressed(_ sender: Any) {
+        guard var party = self.party else { return }
+        let participantIDs = party.invitees
+        let assignments = assignSecretSantaPairs(for: participantIDs)
+        party.assignments = assignments
+        updatePartyAssignments(partyId: party.partyId, assignments: assignments) { error in
+            if error == nil {
+                let message = "Secret Santa Pairs have been assigned!"
+                let alert = UIAlertController(title: "Success!", message: message, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                self.present(alert, animated: true)
+            }
+        }
+    }
+    
     func initRsvp() {
         guard let uid = Auth.auth().currentUser?.uid else {
             showAlert(on: self, title: "Error", message: "No user logged in.")
@@ -82,6 +157,9 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
                let hostUid = partyData["hostUid"] as? String {
                 if (hostUid == uid) {
                     self.rsvpSelector.isHidden = true
+                    if (self.party?.partyType == "Secret Santa") {
+                        self.assignButton.isHidden = false
+                    }
                 } else {
                     self.editButton.isHidden = true
                 }

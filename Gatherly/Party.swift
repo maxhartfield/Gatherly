@@ -13,6 +13,8 @@ struct Party {
     var description: String
     var date: String
     var time: String
+    var partyType: String
     var invitees: [String]
     var hostUid: String
+    var assignments: [String: String]?
 }

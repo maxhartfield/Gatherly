@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="UIMenu" message="Requires Xcode 11 or later." minToolsVersion="11.0" requiredIntegratedClassName="UICommandDiff"/>
@@ -406,7 +406,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="XCK-zX-Adx">
-                                <rect key="frame" x="50" y="153" width="293" height="616"/>
+                                <rect key="frame" x="50" y="94" width="293" height="709"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UserPartyCell" textLabel="nof-Ve-26H" detailTextLabel="2Rw-7U-OFP" style="IBUITableViewCellStyleSubtitle" id="IZN-rN-ukc">
@@ -441,7 +441,7 @@
                                 <sections/>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="My Parties" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MS8-4x-JTN">
-                                <rect key="frame" x="121" y="87.666666666666671" width="151" height="40.333333333333329"/>
+                                <rect key="frame" x="121" y="28.666666666666671" width="151" height="40.333333333333329"/>
                                 <fontDescription key="fontDescription" name="MarkerFelt-Wide" family="Marker Felt" pointSize="31"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -541,17 +541,10 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <menu key="menu" id="xuX-ZU-Nfe">
-                                    <children>
-                                        <command title="General" id="WDr-Np-L6P"/>
-                                        <command title="Secret Santa" id="j1n-xK-CeS"/>
-                                        <command title="Potluck" id="s2Y-FF-Kv8"/>
-                                    </children>
-                                </menu>
                                 <state key="normal" title=" Click to choose option">
                                     <color key="titleColor" systemColor="labelColor"/>
                                 </state>
-                                <buttonConfiguration key="configuration" style="filled" title="General (other options will be added later)">
+                                <buttonConfiguration key="configuration" style="filled" title="Click to choose...">
                                     <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
                                     <color key="baseForegroundColor" systemColor="labelColor"/>
                                     <color key="baseBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -561,6 +554,9 @@
                                         <integer key="value" value="10"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="partyTypePressed:" destination="DtB-HF-6mI" eventType="touchUpInside" id="sc2-DU-R44"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Create Party" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Cj-2y-iiF">
                                 <rect key="frame" x="109" y="83" width="174" height="41"/>
@@ -598,6 +594,7 @@
                         <outlet property="dateTimePicker" destination="UDg-Nd-mtb" id="38o-iI-LLT"/>
                         <outlet property="partyDescriptionTextField" destination="CcY-iA-u0l" id="lhU-dk-Xe0"/>
                         <outlet property="partyNameTextField" destination="JvV-tV-td3" id="LAE-dX-oPQ"/>
+                        <outlet property="partyTypeButton" destination="PQG-gm-ey5" id="5Vi-CJ-5DK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="O2h-Sa-EEB" sceneMemberID="firstResponder"/>
@@ -808,7 +805,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="vjU-Bv-sXb">
-                                <rect key="frame" x="0.0" y="182" width="393" height="553"/>
+                                <rect key="frame" x="0.0" y="123" width="393" height="646"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="Ue4-2g-jyP" style="IBUITableViewCellStyleDefault" id="UlJ-P3-jN9">
@@ -887,7 +884,7 @@
                                 <sections/>
                             </tableView>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="knE-ZJ-hLf">
-                                <rect key="frame" x="0.0" y="118" width="402" height="44"/>
+                                <rect key="frame" x="0.0" y="59" width="402" height="44"/>
                                 <items>
                                     <navigationItem title="Birthday Celebration" id="Hem-Hc-yC8">
                                         <barButtonItem key="leftBarButtonItem" title="Home" id="4g5-4E-ku4"/>
@@ -901,19 +898,19 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Party Info" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T2b-wn-cgc">
-                                <rect key="frame" x="13" y="169" width="80" height="21"/>
+                                <rect key="frame" x="13" y="110" width="80" height="21"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Come to my 21st birthday party!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZnV-yC-pmT">
-                                <rect key="frame" x="13" y="209" width="244" height="21"/>
+                                <rect key="frame" x="13" y="150" width="244" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date: 12/23/24" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vm7-Jy-QUi">
-                                <rect key="frame" x="13" y="249" width="112" height="21"/>
+                                <rect key="frame" x="13" y="190" width="112" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -944,7 +941,7 @@
                                 <state key="normal" title="Change RSVP"/>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Party ID: 123456" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gwd-mB-SH4">
-                                <rect key="frame" x="243" y="168" width="138" height="21"/>
+                                <rect key="frame" x="243" y="109" width="138" height="21"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -1008,7 +1005,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="fO0-H4-ReX">
-                                <rect key="frame" x="50" y="503" width="293" height="266"/>
+                                <rect key="frame" x="50" y="444" width="293" height="359"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="InviteeCell" textLabel="v7x-dC-dUN" style="IBUITableViewCellStyleDefault" id="Nk2-Wf-AqB">
@@ -1108,6 +1105,39 @@
                                     <action selector="rsvpChanged:" destination="nhk-i1-va5" eventType="valueChanged" id="Ndm-Q4-XQU"/>
                                 </connections>
                             </segmentedControl>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KPz-yg-mgQ">
+                                <rect key="frame" x="230" y="272" width="147" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Receiver's Wishlist">
+                                    <fontDescription key="titleFontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="15"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="receiverWishlistPressed:" destination="nhk-i1-va5" eventType="touchUpInside" id="n3m-uD-YmG"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F5g-ro-izn">
+                                <rect key="frame" x="120" y="371" width="152" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Assign Secret Santa">
+                                    <fontDescription key="titleFontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="15"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="assignPressed:" destination="nhk-i1-va5" eventType="touchUpInside" id="s8K-WG-GVU"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5KO-4n-ZV4">
+                                <rect key="frame" x="230" y="312" width="147" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Create Wishlist">
+                                    <fontDescription key="titleFontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="15"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="createWishlistPressed:" destination="nhk-i1-va5" eventType="touchUpInside" id="bGE-7u-jwd"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Ze0-Rb-dL4"/>
                         <color key="backgroundColor" red="0.40392160420000001" green="0.49803921579999999" blue="0.49019610879999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -1128,6 +1158,8 @@
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="assignButton" destination="F5g-ro-izn" id="DW9-LS-lrR"/>
+                        <outlet property="createWishlistButton" destination="5KO-4n-ZV4" id="c8T-2k-vcp"/>
                         <outlet property="editButton" destination="cZj-aq-Ce5" id="oyE-9W-cAQ"/>
                         <outlet property="partyDate" destination="tGQ-ph-6LM" id="FHC-NQ-Knh"/>
                         <outlet property="partyDescription" destination="II8-ba-6Sx" id="SYA-9x-7yI"/>
@@ -1136,7 +1168,7 @@
                         <outlet property="partyTime" destination="u19-s5-LM2" id="kFk-hS-4YJ"/>
                         <outlet property="rsvpSelector" destination="hRm-Vc-3Ne" id="OCZ-QP-gCr"/>
                         <outlet property="tableView" destination="fO0-H4-ReX" id="tJ8-K6-3DP"/>
-                        <segue destination="KAz-NT-Bab" kind="show" identifier="Wishlist" id="6Gp-Er-fA0"/>
+                        <outlet property="viewWishlistButton" destination="KPz-yg-mgQ" id="HTf-gF-HrP"/>
                         <segue destination="E5Z-Jm-yst" kind="show" identifier="Potluck" id="9zF-5h-nnz"/>
                     </connections>
                 </viewController>
@@ -1153,7 +1185,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="p0J-ER-Qdl">
-                                <rect key="frame" x="0.0" y="182" width="393" height="553"/>
+                                <rect key="frame" x="0.0" y="123" width="393" height="646"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="MJN-Lb-X2o" rowHeight="75" style="IBUITableViewCellStyleDefault" id="xe7-gP-Fnl">
@@ -1239,7 +1271,7 @@
                                 <sections/>
                             </tableView>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fhz-pl-XvA">
-                                <rect key="frame" x="0.0" y="118" width="402" height="44"/>
+                                <rect key="frame" x="0.0" y="59" width="402" height="44"/>
                                 <items>
                                     <navigationItem title="Secret Santa" id="L1t-ma-cqi">
                                         <barButtonItem key="leftBarButtonItem" title="Home" id="CXx-CT-dWd"/>
@@ -1247,13 +1279,13 @@
                                 </items>
                             </navigationBar>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Party Info" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CSp-go-5nv">
-                                <rect key="frame" x="12" y="169" width="81" height="21"/>
+                                <rect key="frame" x="12" y="110" width="81" height="21"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Come to my secret santa party!      Please no gag gifts." textAlignment="natural" lineBreakMode="characterWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mhK-um-eYN">
-                                <rect key="frame" x="12" y="180" width="50" height="79"/>
+                                <rect key="frame" x="12" y="121" width="50" height="79"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="50" id="150-ep-cgI"/>
                                     <constraint firstAttribute="height" constant="79" id="1EM-Bw-F8S"/>
@@ -1263,25 +1295,25 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date: 12/20/24" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Ri-C9-kkb">
-                                <rect key="frame" x="12" y="249" width="112" height="21"/>
+                                <rect key="frame" x="12" y="190" width="112" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time: 5:00 PM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Lm-4X-kUh">
-                                <rect key="frame" x="12" y="278" width="112" height="21"/>
+                                <rect key="frame" x="12" y="219" width="112" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location: My apartment" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2hH-Uz-lTx">
-                                <rect key="frame" x="13" y="210" width="181" height="21"/>
+                                <rect key="frame" x="13" y="244" width="181" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RSVP Info" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mu4-Gl-BdB">
-                                <rect key="frame" x="12" y="262" width="81" height="21"/>
+                                <rect key="frame" x="12" y="296" width="81" height="21"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -1300,7 +1332,7 @@
                                 <state key="normal" title="Change RSVP"/>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Party ID: 321321" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zcO-2c-5SR">
-                                <rect key="frame" x="243" y="166" width="134" height="21"/>
+                                <rect key="frame" x="243" y="107" width="134" height="21"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -1342,7 +1374,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Price Range: $30 - $50" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eXb-aX-BIa">
-                                <rect key="frame" x="13" y="233" width="178" height="21"/>
+                                <rect key="frame" x="13" y="267" width="178" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -1656,7 +1688,7 @@
         <!--Secret Santa View Controller-->
         <scene sceneID="ltX-gc-hT5">
             <objects>
-                <viewController id="KAz-NT-Bab" customClass="SecretSantaViewController" customModule="Gatherly" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SecretSantaViewController" id="KAz-NT-Bab" customClass="SecretSantaViewController" customModule="Gatherly" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vYf-O7-j3C">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1712,12 +1744,20 @@
                                     <color key="baseForegroundColor" systemColor="darkTextColor"/>
                                     <color key="baseBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
+                                <connections>
+                                    <action selector="submitPressed:" destination="KAz-NT-Bab" eventType="touchUpInside" id="AfK-7H-l2W"/>
+                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="kwE-SN-m4p"/>
                         <color key="backgroundColor" red="0.40392160420000001" green="0.49803921579999999" blue="0.49019610879999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     </view>
                     <navigationItem key="navigationItem" id="mnY-ow-3Pa"/>
+                    <connections>
+                        <outlet property="wishlistItem1" destination="nUg-8u-rfo" id="XgG-Mq-tOM"/>
+                        <outlet property="wishlistItem2" destination="q5J-Kh-WiC" id="yS8-yl-u6T"/>
+                        <outlet property="wishlistItem3" destination="cky-dJ-tIu" id="62w-BT-JjY"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ljX-k9-PQd" sceneMemberID="firstResponder"/>
             </objects>
@@ -1877,7 +1917,7 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="ckk-kg-TX3"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Tbc-6M-gKQ">
-                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>

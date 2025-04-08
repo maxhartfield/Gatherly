@@ -69,10 +69,11 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                        let description = partyData["description"] as? String,
                        let dateString = partyData["date"] as? String,
                        let time = partyData["time"] as? String,
+                       let partyType = partyData["partyType"] as? String,
                        let hostUid = partyData["hostUid"] as? String {
                         let isHost = (hostUid == uid)
                         let invitees = partyData["invitees"] as? [String]
-                        let party = Party(partyId: partyId, name: name, description: description, date: dateString, time: time, invitees: invitees ?? [], hostUid: hostUid)
+                        let party = Party(partyId: partyId, name: name, description: description, date: dateString, time: time, partyType: partyType, invitees: invitees ?? [], hostUid: hostUid)
                         self.parties.append(party)
                     }
                 }
