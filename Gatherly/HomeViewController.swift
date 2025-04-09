@@ -73,9 +73,9 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                        let time = partyData["time"] as? String,
                        let partyType = partyData["partyType"] as? String,
                        let hostUid = partyData["hostUid"] as? String {
-                        let isHost = (hostUid == uid)
                         let invitees = partyData["invitees"] as? [String]
-                        let party = Party(partyId: partyId, name: name, description: description, date: dateString, time: time, partyType: partyType, invitees: invitees ?? [], hostUid: hostUid)
+                        let assignments = partyData["assignments"] as? [String: String]
+                        let party = Party(partyId: partyId, name: name, description: description, date: dateString, time: time, partyType: partyType, invitees: invitees ?? [], hostUid: hostUid, assignments: assignments)
                         self.parties.append(party)
                     }
                 }
@@ -132,6 +132,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                let indexPath = tableView.indexPathForSelectedRow {
                 let selectedParty = parties[indexPath.row]
                 destinationVC.party = selectedParty
+                print(selectedParty)
             }
         }
     }
