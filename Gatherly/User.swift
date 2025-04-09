@@ -13,6 +13,7 @@ struct User {
     let lastName: String
     let email: String
     let rsvps: [String: String]
+    var bringing : [String : [String]]?
     let darkMode: Bool
     let calendarEnabled: Bool
 }

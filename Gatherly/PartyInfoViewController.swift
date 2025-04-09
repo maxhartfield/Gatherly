@@ -11,11 +11,16 @@ import FirebaseAuth
 
 
 class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, PartyUpdater {
+    
     var party: Party?
     var invitees: [User] = []
     var rsvps : [String : String] = [:]
     @IBOutlet weak var partyName: UILabel!
-    @IBOutlet weak var partyID: UILabel!
+    
+    
+    @IBOutlet weak var partyID: UITextView!
+    
+    
     @IBOutlet weak var partyDescription: UILabel!
     @IBOutlet weak var partyDate: UILabel!
     @IBOutlet weak var partyTime: UILabel!
@@ -23,6 +28,11 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var rsvpSelector: UISegmentedControl!
     @IBOutlet weak var editButton: UIBarButtonItem!
     
+    // potluck
+    @IBOutlet weak var addItemsButton: UIButton!
+    @IBOutlet weak var createListButton: UIButton!
+    
+    // secret santa
     @IBOutlet weak var assignButton: UIButton!
     @IBOutlet weak var createWishlistButton: UIButton!
     @IBOutlet weak var viewWishlistButton: UIButton!
@@ -32,6 +42,7 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         updateDarkMode(darkMode: darkMode, to: view)
         navigationController?.navigationBar.tintColor = .white
         partyName.text = party?.name
@@ -42,31 +53,43 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.backgroundColor = .clear
         tableView.delegate = self
         tableView.dataSource = self
+        
+        // secret santa
         viewWishlistButton.isHidden = true
         createWishlistButton.isHidden = true
+        
+        // potluck
+        addItemsButton.isHidden = true
+        createListButton.isHidden = true
+        
         assignButton.isHidden = true
         if let partyType = party?.partyType, partyType == "Secret Santa"{
             view.backgroundColor = UIColor(red: 0.95, green: 0.88, blue: 0.73, alpha: 1.0)
             viewWishlistButton.isHidden = false
             createWishlistButton.isHidden = false
         }
+        if let partyType = party?.partyType, partyType == "Potluck"{
+            addItemsButton.isHidden = false
+        }
         fetchInvitees()
         initRsvp()
         
+        // add calendar if you haven't
+//        guard let currentUserID = Auth.auth().currentUser?.uid else { return }
+//        Firestore.firestore().collection("users").document(currentUserID).updateData([
+//            "calendarEnabled" : false
+//        ]) { error in
+//            if let error = error {
+//                showAlert(on: self, title: "Firestore Error", message: "Failed to save user: \(error.localizedDescription)")
+//            }
+//        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateDarkMode(darkMode: darkMode, to: view)
     }
-    
-    @IBAction func createWishlistPressed(_ sender: Any) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let createWishlistVC = storyboard.instantiateViewController(withIdentifier: "SecretSantaViewController") as? SecretSantaViewController {
-            //createWishlistVC.party = self.party
-            self.navigationController?.pushViewController(createWishlistVC, animated: true)
-        }
-    }
+
     
     @IBAction func receiverWishlistPressed(_ sender: Any) {
         guard let currentUserID = Auth.auth().currentUser?.uid else { return }
@@ -160,6 +183,9 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
                     if (self.party?.partyType == "Secret Santa") {
                         self.assignButton.isHidden = false
                     }
+                    if (self.party?.partyType == "Potluck") {
+                        self.createListButton.isHidden = false
+                    }
                 } else {
                     self.editButton.isHidden = true
                 }
@@ -191,7 +217,6 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
             default:
                 self.rsvpSelector.selectedSegmentIndex = 2
             }
-            
         }
     }
     
@@ -216,7 +241,6 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
             }
         }
         fetchInvitees()
-        self.tableView.reloadData()
     }
     
     func fetchInvitees() {
@@ -224,6 +248,8 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
          let db = Firestore.firestore()
          
          invitees.removeAll()
+        
+
          let group = DispatchGroup()
          for uid in party.invitees {
              group.enter()
@@ -236,7 +262,7 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
                      print("Error fetching user \(uid): \(error.localizedDescription)")
                      return
                  }
-                 
+
                  if let data = document?.data(),
                     let firstName = data["firstName"] as? String,
                     let lastName = data["lastName"] as? String,
@@ -249,6 +275,8 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
                  }
              }
          }
+         
+         self.tableView.reloadData()
          
          group.notify(queue: .main) {
              self.invitees.sort { $0.lastName < $1.lastName }
@@ -288,6 +316,20 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
             if let editPartyVC = segue.destination as? EditPartyViewController {
                 editPartyVC.party = self.party
                 editPartyVC.delegate = self
+            }
+        } else if segue.identifier == "SecretSanta" {
+            if let secretSantaVC = segue.destination as? SecretSantaViewController {
+                secretSantaVC.party = self.party
+            }
+        } else if segue.identifier == "Potluck" {
+            if let potluckVC = segue.destination as? PotluckWishlistViewController {
+                potluckVC.party = self.party
+                potluckVC.delegate = self
+            }
+        } else if segue.identifier == "PotluckList"{
+            if let potlucklistVC = segue.destination as? CreateListViewController {
+                potlucklistVC.party = self.party
+                potlucklistVC.delegate = self
             }
         }
     }

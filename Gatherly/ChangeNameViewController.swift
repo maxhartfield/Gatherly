@@ -60,6 +60,9 @@ class ChangeNameViewController: UIViewController {
                 return
             }
             
+            print(data)
+            print(document!)
+            
             self.currfname = document!["firstName"] as! String
             self.currlname = document!["lastName"] as! String
             print(self.currfname, self.currlname)

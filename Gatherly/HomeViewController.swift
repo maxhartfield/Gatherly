@@ -51,6 +51,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                 showAlert(on: self, title: "Error", message: "Invalid user data format.")
                 return
             }
+    
             
             self.parties.removeAll()
             

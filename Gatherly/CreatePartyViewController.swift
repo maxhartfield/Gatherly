@@ -74,7 +74,10 @@ class CreatePartyViewController: UIViewController {
             "time": timeString,
             "partyType": partyType!,
             "hostUid": uid,
-            "invitees": [uid]
+            "invitees": [uid],
+            "items" : [],
+            "claimed" : [:],
+            "mappings" : [:]
         ]
 
         let db = Firestore.firestore()
