@@ -97,8 +97,25 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
             showAlert(on: self, title: "No Assignment", message: "You haven't been assigned a recipient yet.")
             return
         }
+
         let db = Firestore.firestore()
-        db.collection("parties").document(party!.partyId)
+        let userRef = db.collection("users").document(receiverUID)
+
+        userRef.getDocument { userDoc, error in
+            if let error = error {
+                showAlert(on: self, title: "Error", message: "Failed to fetch recipient's name: \(error.localizedDescription)")
+                return
+            }
+
+            guard let userData = userDoc?.data(),
+                  let firstName = userData["firstName"] as? String,
+                  let lastName = userData["lastName"] as? String else {
+                showAlert(on: self, title: "Error", message: "Could not find recipient's name.")
+                return
+            }
+
+            let recipientName = "\(firstName) \(lastName)"
+            db.collection("parties").document(self.party!.partyId)
                 .collection("wishlists").document(receiverUID)
                 .getDocument { document, error in
                     if let error = error {
@@ -108,7 +125,7 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
                         self.present(alert, animated: true)
                         return
                     }
-                    
+
                     var message: String
                     if let document = document, document.exists,
                        let data = document.data() {
@@ -122,14 +139,16 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
                     } else {
                         message = "Your recipient hasn't submitted a wishlist yet."
                     }
-                    
-                    let alert = UIAlertController(title: "Recipient Wishlist", message: message, preferredStyle: .alert)
+
+                    let alert = UIAlertController(title: "\(recipientName)'s Wishlist", message: message, preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                     DispatchQueue.main.async {
                         self.present(alert, animated: true, completion: nil)
                     }
                 }
+        }
     }
+
     
     @IBAction func rsvpChanged(_ sender: Any) {
         switch rsvpSelector.selectedSegmentIndex {

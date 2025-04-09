@@ -31,10 +31,10 @@ class SecretSantaViewController: UIViewController {
                 if let error = error {
                     print("Error fetching wishlist: \(error.localizedDescription)")
                 } else if let data = doc?.data() {
-                    let wishlist = data["wishlist"] as? [String]
-                    self.wishlistItem1.text = wishlist![0]
-                    self.wishlistItem2.text = wishlist![1]
-                    self.wishlistItem3.text = wishlist![2]
+                    let wishlist = data["wishlist"] as? [String] ?? []
+                    self.wishlistItem1.text = wishlist.count > 0 ? wishlist[0] : ""
+                    self.wishlistItem2.text = wishlist.count > 1 ? wishlist[1] : ""
+                    self.wishlistItem3.text = wishlist.count > 2 ? wishlist[2] : ""
                 }
             }
        
