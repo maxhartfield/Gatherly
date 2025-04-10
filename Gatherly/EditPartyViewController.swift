@@ -132,7 +132,6 @@ class EditPartyViewController: UIViewController {
         guard let partyId = party?.partyId else { return }
         let db = Firestore.firestore()
         let partyRef = db.collection("parties").document(partyId)
-        
         partyRef.getDocument { (document, error) in
             if let error = error {
                 showAlert(on: self, title: "Error", message: "Failed to retrieve party data: \(error.localizedDescription)")
@@ -144,9 +143,9 @@ class EditPartyViewController: UIViewController {
                 showAlert(on: self, title: "Error", message: "Invalid party data.")
                 return
             }
-            
+
             if calendarEnabled,
-                let eventId = data["calendarEventId"] as? String {
+               let eventId = data["calendarEventId"] as? String {
                 let status = EKEventStore.authorizationStatus(for: .event)
                 if status == .fullAccess || status == .writeOnly {
                     self.deletePartyFromCalendar(eventId: eventId)
@@ -154,37 +153,49 @@ class EditPartyViewController: UIViewController {
             }
 
             let batch = db.batch()
+            var completedCount = 0
+            let totalInvitees = invitees.count
+
+            if totalInvitees == 0 {
+                batch.deleteDocument(partyRef)
+                batch.commit { error in
+                    if let error = error {
+                        showAlert(on: self, title: "Error", message: "Failed to delete party: \(error.localizedDescription)")
+                    } else {
+                        showAlert(on: self, title: "Success", message: "Party deleted!") {
+                            self.navigationController?.popToRootViewController(animated: false)
+                        }
+                    }
+                }
+                return
+            }
 
             for inviteeUid in invitees {
                 let userRef = db.collection("users").document(inviteeUid)
                 userRef.getDocument { (userDoc, error) in
-                    if let error = error {
-                        print("Error retrieving user data: \(error.localizedDescription)")
-                        return
-                    }
-                    guard let userData = userDoc?.data() else {
-                        print("Invalid user data format.")
-                        return
-                    }
-                    if let eventId = userData["calendarEventId"] as? String {
+                    if let userData = userDoc?.data(),
+                       let eventId = userData["calendarEventId"] as? String {
                         self.removeInviteeFromCalendar(eventId: eventId)
                     }
                     batch.updateData(["rsvps.\(partyId)": FieldValue.delete()], forDocument: userRef)
-                }
-            }
-
-            batch.deleteDocument(partyRef)
-            batch.commit { error in
-                if let error = error {
-                    showAlert(on: self, title: "Error", message: "Failed to delete party: \(error.localizedDescription)")
-                } else {
-                    showAlert(on: self, title: "Success", message: "Party deleted!") {
-                        self.navigationController!.popToRootViewController(animated: false)
+                    completedCount += 1
+                    if completedCount == totalInvitees {
+                        batch.deleteDocument(partyRef)
+                        batch.commit { error in
+                            if let error = error {
+                                showAlert(on: self, title: "Error", message: "Failed to delete party: \(error.localizedDescription)")
+                            } else {
+                                showAlert(on: self, title: "Success", message: "Party deleted!") {
+                                    self.navigationController?.popToRootViewController(animated: false)
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
     }
+
     
     func deletePartyFromCalendar(eventId: String) {
         let eventStore = EKEventStore()

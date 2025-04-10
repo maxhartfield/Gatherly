@@ -168,16 +168,46 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     @IBAction func assignPressed(_ sender: Any) {
-        guard var party = self.party else { return }
-        let participantIDs = party.invitees
-        let assignments = assignSecretSantaPairs(for: participantIDs)
-        party.assignments = assignments
-        updatePartyAssignments(partyId: party.partyId, assignments: assignments) { error in
-            if error == nil {
-                let message = "Secret Santa Pairs have been assigned!"
-                let alert = UIAlertController(title: "Success!", message: message, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default))
-                self.present(alert, animated: true)
+        guard let party = self.party else { return }
+        let db = Firestore.firestore()
+        let partyId = party.partyId
+        let invitees = party.invitees
+        var goingInvitees: [String] = []
+        let dispatchGroup = DispatchGroup()
+
+        for uid in invitees {
+            dispatchGroup.enter()
+            let userRef = db.collection("users").document(uid)
+            userRef.getDocument { (doc, error) in
+                defer { dispatchGroup.leave() }
+
+                if let error = error {
+                    print("Error fetching user: \(error.localizedDescription)")
+                    return
+                }
+                if let data = doc?.data(),
+                   let rsvps = data["rsvps"] as? [String: String],
+                   rsvps[partyId] == "Going" {
+                    goingInvitees.append(uid)
+                }
+            }
+        }
+
+        dispatchGroup.notify(queue: .main) {
+            let assignments = self.assignSecretSantaPairs(for: goingInvitees)
+            self.party?.assignments = assignments
+            self.updatePartyAssignments(partyId: partyId, assignments: assignments) { error in
+                if error == nil {
+                    let alert = UIAlertController(
+                        title: "Success!",
+                        message: "Secret Santa Pairs have been assigned!",
+                        preferredStyle: .alert
+                    )
+                    alert.addAction(UIAlertAction(title: "OK", style: .default))
+                    self.present(alert, animated: true)
+                } else {
+                    showAlert(on: self, title: "Error", message: "Failed to update assignments.")
+                }
             }
         }
     }

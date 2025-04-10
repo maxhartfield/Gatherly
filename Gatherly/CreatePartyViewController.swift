@@ -13,6 +13,7 @@ class CreatePartyViewController: UIViewController {
         super.viewDidLoad()
         updateDarkMode(darkMode: darkMode, to: view)
         dateTimePicker.minimumDate = Date()
+        prepareMenu()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -20,8 +21,27 @@ class CreatePartyViewController: UIViewController {
         updateDarkMode(darkMode: darkMode, to: view)
     }
     
-    @IBAction func partyTypePressed(_ sender: Any) {
-        print("hgere")
+//    @IBAction func partyTypePressed(_ sender: Any) {
+//        print("hgere")
+//        let generalAction = UIAction(title: "General", image: nil) { [weak self] action in
+//            self?.partyTypeButton.setTitle("General", for: .normal)
+//        }
+//        let secretSantaAction = UIAction(title: "Secret Santa", image: nil) { [weak self] action in
+//            self?.partyTypeButton.setTitle("Secret Santa", for: .normal)
+//        }
+//        let potluckAction = UIAction(title: "Potluck", image: nil) { [weak self] action in
+//            self?.partyTypeButton.setTitle("Potluck", for: .normal)
+//        }
+//
+//        let menu = UIMenu(title: "Select Party Type", options: .displayInline, children: [
+//            generalAction, secretSantaAction, potluckAction
+//        ])
+//
+//        partyTypeButton.menu = menu
+//        partyTypeButton.showsMenuAsPrimaryAction = true
+//    }
+    
+    func prepareMenu(){
         let generalAction = UIAction(title: "General", image: nil) { [weak self] action in
             self?.partyTypeButton.setTitle("General", for: .normal)
         }
