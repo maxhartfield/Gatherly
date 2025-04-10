@@ -1,37 +1,34 @@
-Gatherly IOS Project
+Gatherly IOS Project Group 5
 
 Max Hartfield, Raymond Wang, Samika Iyer, Jamie Babbe
 
 Contributions: 
 
-Jamie Babbe (20%)
-UI background and decoration redesign
-Updated UI fonts and component design
-Implemented Dark Mode functionality
-Embedded Navigation Controller
-Changed Join Party page to a Join Party alert
-Created the logo for our app
-Fixed the description in the Party Info page
+Jamie Babbe (25%)
+Added party type selection using a sub‑menu
+Implemented wishlist creation and viewing for both parties involved in secret santa
+Implemented the assignment of random secret santa pairs
+Made minor UI changes to Home Screen and Party Info screen
 
-Samika Iyer (20%)
-UI background and label/button design
-Dark Mode functionality
-Segues/Navigation Controller embedding and navigation between screens
-Added Party Info Screen to populate the information from the party cell that was clicked in the Home Screen table
-Added Edit Party Screen, made visible only to hosts, which populates existing information that the host entered about the party
+Samika Iyer (25%)
+Created calendar event upon joining a party, if permissions are enabled
+Edit the calendar event for host and invitees when a party is edited, if permissions are enabled
+Delete the calendar event for host and invitees when a party is deleted, if permissions are enabled
+Changed Secret Santa to only assign “Going” guests to be part of exchange
+Fixed minor UI bugs
 
-Raymond Wang (20%)
-Segues between screens
-Change user name functionality
-Update password in functionality through re-authenticating
-RSVP functionality for invitees, updating the tables after RSVP changed
+Raymond Wang (25%)
+Created potluck list creation page as well as page for invitees to choose items to bring
+Saved the potluck items list to database
+Displayed items as well as which user is bringing it
+created functionality for user to select which items they are bringing
+Repopulate secret santa list with current user’s list
 
-Max Hartfield (40%)
-Set up firebase
-Login, Create account, Log out functionality
-Designed database scheme
-Updated database for create account, create party, join party, edit party, and darkmode
-Displayed info from database on home screen and party info screen’s table views 
+Max Hartfield (25%)
+Saved calendar notification setting to database
+Created calendar event upon creating a party if the user has the setting activated
+Fixed bugs for Secret Santa
+Displayed Secret Santa first and last name when showing receivers wishlist
 
 Deviations: N/A
 
