@@ -33,12 +33,11 @@ class EditPartyViewController: UIViewController {
     
     @IBAction func onSubmitPressed(_ sender: Any) {
         guard let partyId = party?.partyId,
-              let updatedName = partyName.text, !updatedName.isEmpty,
-              let updatedDescription = partyDescription.text, !updatedDescription.isEmpty else {
-            showAlert(on: self, title: "Error", message: "Please fill in all fields before submitting.")
+            let updatedName = partyName.text, !updatedName.isEmpty,
+            let updatedDescription = partyDescription.text, !updatedDescription.isEmpty else {
+                showAlert(on: self, title: "Error", message: "Please fill in all fields before submitting.")
             return
-        }
-
+            }
         let selectedDate = dateTimePicker.date
 
         let dateFormatter = DateFormatter()
@@ -52,43 +51,47 @@ class EditPartyViewController: UIViewController {
         let formattedTime = timeFormatter.string(from: selectedDate)
 
         let db = Firestore.firestore()
+        let partyRef = db.collection("parties").document(partyId)
 
-        db.collection("parties").document(partyId).updateData([
-            "name": updatedName,
-            "description": updatedDescription,
-            "date": formattedDate,
-            "time": formattedTime
-        ]) { error in
-            if let error = error {
-                showAlert(on: self, title: "Error", message: "Failed to update party: \(error.localizedDescription)")
-            } else {
-                if calendarEnabled {
-                    let eventStore = EKEventStore()
-                    let status = EKEventStore.authorizationStatus(for: .event)
-                    if (status == .fullAccess || status == .writeOnly),
-                       let eventId = self.party?.calendarEventId {
-                        self.updatePartyInCalendar(
-                            eventId: eventId,
-                            newName: updatedName,
-                            newDescription: updatedDescription,
-                            newStartDate: selectedDate)
-                    } else {
-                        print("Calendar access not granted or event ID is missing.")
+        partyRef.updateData([
+                "name": updatedName,
+                "description": updatedDescription,
+                "date": formattedDate,
+                "time": formattedTime
+            ]) { error in
+                if let error = error {
+                    showAlert(on: self, title: "Error", message: "Failed to update party: \(error.localizedDescription)")
+                } else {
+                    partyRef.getDocument { (partyDoc, error) in
+                        if let error = error {
+                            print("Error retrieving party data: \(error.localizedDescription)")
+                            return
+                        }
+                        guard let partyData = partyDoc?.data(),
+                              let eventId = partyData["calendarEventId"] as? String else {
+                            print("No calendar event ID found.")
+                            return
+                        }
+
+                        if calendarEnabled {
+                            self.updatePartyInCalendar(eventId: eventId, newName: updatedName, newDescription: updatedDescription, newStartDate: selectedDate)
+                        }
+
+                        self.updateInviteesCalendar(partyId: partyId, newName: updatedName, newDescription: updatedDescription, newStartDate: selectedDate)
+                        
+                        showAlert(on: self, title: "Success", message: "Party details updated!") {
+                            self.party?.name = updatedName
+                            self.party?.description = updatedDescription
+                            self.party?.date = formattedDate
+                            self.party?.time = formattedTime
+                            if let updatedParty = self.party {
+                                self.delegate?.updateParty(updatedParty)
+                            }
+                            self.navigationController?.popViewController(animated: true)
+                        }
                     }
-                }
-                self.updateInviteesCalendar(partyId: partyId, newName: updatedName, newDescription: updatedDescription, newStartDate: selectedDate)
-                showAlert(on: self, title: "Success", message: "Party details updated!") {
-                    self.party?.name = updatedName
-                    self.party?.description = updatedDescription
-                    self.party?.date = formattedDate
-                    self.party?.time = formattedTime
-                    if let updatedParty = self.party {
-                        self.delegate?.updateParty(updatedParty)
-                    }
-                    self.navigationController?.popViewController(animated: true)
                 }
             }
-        }
     }
     
     func updatePartyInCalendar(eventId: String, newName: String, newDescription: String, newStartDate: Date) {
