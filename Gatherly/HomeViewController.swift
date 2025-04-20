@@ -13,7 +13,7 @@ import EventKit
 class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource  {
     
     var partyIdEntered: String?
-    let cellIdentifier = "UserPartyCell"
+    let cellIdentifier = "PartyCardCell"
     @IBOutlet weak var tableView: UITableView!
     var parties: [Party] = []
     
@@ -21,6 +21,8 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewDidLoad()
         updateDarkMode(darkMode: darkMode, to: view)
         navigationController?.navigationBar.tintColor = .white
+        //tableView.backgroundColor = UIColor.systemGroupedBackground
+        tableView.separatorStyle = .none
         // Do any additional setup after loading the view.
         tableView.backgroundColor = .clear
         tableView.delegate = self
@@ -51,10 +53,8 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                 showAlert(on: self, title: "Error", message: "Invalid user data format.")
                 return
             }
-    
-            
+
             self.parties.removeAll()
-            
             let group = DispatchGroup()
             
             for partyId in rsvps.keys {
@@ -66,6 +66,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                         print("Error fetching party \(partyId): \(error.localizedDescription)")
                         return
                     }
+                    
                     if let partyData = partyDoc?.data(),
                        let name = partyData["name"] as? String,
                        let description = partyData["description"] as? String,
@@ -73,15 +74,45 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                        let time = partyData["time"] as? String,
                        let partyType = partyData["partyType"] as? String,
                        let hostUid = partyData["hostUid"] as? String {
+                        
                         let invitees = partyData["invitees"] as? [String]
                         let assignments = partyData["assignments"] as? [String: String]
-                        let party = Party(partyId: partyId, name: name, description: description, date: dateString, time: time, partyType: partyType, invitees: invitees ?? [], hostUid: hostUid, assignments: assignments)
+                        var party = Party(
+                            partyId: partyId,
+                            name: name,
+                            description: description,
+                            date: dateString,
+                            time: time,
+                            partyType: partyType,
+                            invitees: invitees ?? [],
+                            hostUid: hostUid,
+                            assignments: assignments
+                        )
+                        party.userRSVPStatus = rsvps[partyId]
                         self.parties.append(party)
                     }
                 }
             }
+
             group.notify(queue: .main) {
-                self.parties.sort { $0.date < $1.date }
+                let formatter = DateFormatter()
+                formatter.dateFormat = "yyyy-MM-dd h:mm a"
+                formatter.locale = Locale(identifier: "en_US_POSIX")
+
+                self.parties.sort {
+                    let dateTime1 = "\( $0.date ) \( $0.time )"
+                    let dateTime2 = "\( $1.date ) \( $1.time )"
+                    
+                    guard let d1 = formatter.date(from: dateTime1),
+                          let d2 = formatter.date(from: dateTime2) else {
+                        return false
+                    }
+
+                    if d1 == d2 {
+                        return $0.name < $1.name
+                    }
+                    return d1 < d2
+                }
                 self.tableView.reloadData()
             }
         }
@@ -90,40 +121,39 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return parties.count
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 110
+    }
         
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? PartyCardCell else {
+            return UITableViewCell()
+        }
+
         let party = parties[indexPath.row]
-        cell.textLabel?.text = "\(party.name)     Date: \(party.date)"
-        cell.detailTextLabel?.textColor = .white
+        cell.nameLabel.text = party.name
+        cell.dateLabel.text = "Date: \(party.date)"
+        
         guard let user = Auth.auth().currentUser else { return cell }
         let uid = user.uid
-        let db = Firestore.firestore()
-        cell.detailTextLabel?.text = party.hostUid == uid ? "Host" : "Invitee"
-        let userRef = db.collection("users").document(uid)
-        userRef.getDocument { (document, error) in
-            DispatchQueue.main.async {
-                if let document = document, document.exists,
-                   let rsvps = document.data()?["rsvps"] as? [String: String],
-                   let rsvpStatus = rsvps[party.partyId] {
-                    switch rsvpStatus {
-                    case "Going":
-                        cell.contentView.backgroundColor = .systemGreen
-                    case "Undecided":
-                        cell.contentView.backgroundColor = .systemYellow
-                    case "Not Going":
-                        cell.contentView.backgroundColor = .systemRed
-                    default:
-                        cell.contentView.backgroundColor = .systemGray
-                    }
-                } else {
-                    showAlert(on: self, title: "Error:", message: "No RSVP found for party \(party.partyId)")
-                }
-            }
+
+        // Set role
+        cell.detailLabel.text = party.hostUid == uid ? "Host" : "Invitee"
+        
+        switch party.userRSVPStatus {
+        case "Going":
+            cell.containerView.backgroundColor = .systemGreen.withAlphaComponent(0.8)
+        case "Undecided":
+            cell.containerView.backgroundColor = .systemYellow.withAlphaComponent(0.9)
+        case "Not Going":
+            cell.containerView.backgroundColor = .systemRed.withAlphaComponent(0.8)
+        default:
+            cell.containerView.backgroundColor = .systemGray6
         }
+
         return cell
     }
-
 
         
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

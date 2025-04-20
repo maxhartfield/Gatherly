@@ -19,4 +19,5 @@ struct Party {
     var assignments: [String: String]?
     var potlucklist : [String: Bool]?
     var calendarEventId: String?
+    var userRSVPStatus: String? = nil
 }

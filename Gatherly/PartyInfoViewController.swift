@@ -37,13 +37,19 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var createWishlistButton: UIButton!
     @IBOutlet weak var viewWishlistButton: UIButton!
     
-    let cellIdentifier = "InviteeCell"
+    let cellIdentifier = "InviteeCardCell"
     let segueToEdit = "EditParty"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         updateDarkMode(darkMode: darkMode, to: view)
+        tableView.separatorStyle = .none
+        tableView.contentInset = .zero
+        tableView.tableHeaderView = nil
+        tableView.tableFooterView = UIView()
+        tableView.sectionHeaderHeight = 0
+        tableView.sectionFooterHeight = 0
         navigationController?.navigationBar.tintColor = .white
         partyName.text = party?.name
         partyDescription.text = party?.description
@@ -67,9 +73,14 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
             view.backgroundColor = UIColor(red: 0.95, green: 0.88, blue: 0.73, alpha: 1.0)
             viewWishlistButton.isHidden = false
             createWishlistButton.isHidden = false
+            addFallingParticles(imageName: "snowflake")
         }
         if let partyType = party?.partyType, partyType == "Potluck"{
             addItemsButton.isHidden = false
+            addFallingParticles(imageName: "turkey")
+        }
+        if let partyType = party?.partyType, partyType == "General"{
+            addConfettiParticles()
         }
         fetchInvitees()
         initRsvp()
@@ -337,28 +348,33 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
          return invitees.count
      }
      
-     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
-         let user = invitees[indexPath.row]
-         cell.textLabel?.text = "\(user.firstName) \(user.lastName)"
-         cell.textLabel?.textColor = .white
-         cell.contentView.backgroundColor = .systemGray
-         
-         let rsvpStatus = user.rsvps[party?.partyId ?? ""] ?? "Undecided"
-         
-         switch rsvpStatus {
-         case "Going":
-             cell.contentView.backgroundColor = .systemGreen
-         case "Undecided":
-             cell.contentView.backgroundColor = .systemYellow
-         case "Not Going":
-             cell.contentView.backgroundColor = .systemRed
-         default:
-             cell.contentView.backgroundColor = .systemGray
-         }
-         
-         return cell
-     }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? InviteeCardCell else {
+            return UITableViewCell()
+        }
+
+        let user = invitees[indexPath.row]
+        cell.nameLabel.text = "\(user.firstName) \(user.lastName)"
+        
+        let rsvpStatus = user.rsvps[party?.partyId ?? ""] ?? "Undecided"
+        
+        switch rsvpStatus {
+        case "Going":
+            cell.containerView.backgroundColor = UIColor.systemGreen.withAlphaComponent(0.8)
+        case "Undecided":
+            cell.containerView.backgroundColor = UIColor.systemYellow.withAlphaComponent(0.9)
+        case "Not Going":
+            cell.containerView.backgroundColor = UIColor.systemRed.withAlphaComponent(0.8)
+        default:
+            cell.containerView.backgroundColor = .systemGray5
+        }
+
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 70
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "EditParty" {
@@ -382,6 +398,82 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
             }
         }
     }
+    
+    func addFallingParticles(imageName: String, count: Float = 25, lifetime: Float = 6.0) {
+        let emitter = CAEmitterLayer()
+        emitter.emitterPosition = CGPoint(x: view.bounds.width / 2, y: -10)
+        emitter.emitterShape = .line
+        emitter.emitterSize = CGSize(width: view.bounds.width, height: 2)
+        emitter.beginTime = CACurrentMediaTime()
+        emitter.birthRate = 1
+        emitter.lifetime = 1.0
+
+        let cell = CAEmitterCell()
+        cell.contents = UIImage(named: imageName)?.cgImage
+        cell.birthRate = count
+        cell.lifetime = lifetime
+        cell.velocity = 150
+        cell.velocityRange = 50
+        cell.yAcceleration = 100
+        cell.emissionRange = .pi
+        cell.scale = 0.02
+        cell.scaleRange = 0.02
+        cell.spin = 0.3
+        cell.spinRange = 1.0
+
+        emitter.emitterCells = [cell]
+        view.layer.addSublayer(emitter)
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            emitter.birthRate = 0
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + Double(lifetime) + 1.0) {
+            emitter.removeFromSuperlayer()
+        }
+    }
+    
+    func addConfettiParticles(countPerColor: Float = 10) {
+        let emitter = CAEmitterLayer()
+        emitter.emitterPosition = CGPoint(x: view.bounds.width / 2, y: -10)
+        emitter.emitterShape = .line
+        emitter.emitterSize = CGSize(width: view.bounds.width, height: 2)
+        emitter.beginTime = CACurrentMediaTime()
+        emitter.birthRate = 1
+        emitter.lifetime = 1.0
+
+        let colors: [UIColor] = [.systemRed, .systemBlue, .systemGreen, .systemOrange, .systemPurple]
+        let particleLifetime: Float = 6.0
+        var cells: [CAEmitterCell] = []
+
+        for color in colors {
+            let cell = CAEmitterCell()
+            cell.contents = UIImage(named: "confettiShape")?.cgImage
+            cell.birthRate = countPerColor
+            cell.lifetime = particleLifetime
+            cell.velocity = 150
+            cell.velocityRange = 50
+            cell.yAcceleration = 100
+            cell.emissionRange = .pi
+            cell.scale = 0.02
+            cell.scaleRange = 0.005
+            cell.color = color.cgColor
+            cells.append(cell)
+        }
+
+        emitter.emitterCells = cells
+        view.layer.addSublayer(emitter)
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            emitter.birthRate = 0
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + Double(particleLifetime) + 1.0) {
+            emitter.removeFromSuperlayer()
+        }
+    }
+
+
 
     func updateParty(_ updatedParty: Party) {
         self.party = updatedParty

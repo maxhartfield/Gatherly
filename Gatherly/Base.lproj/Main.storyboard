@@ -409,22 +409,22 @@
                                 <rect key="frame" x="50" y="94" width="293" height="709"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UserPartyCell" textLabel="nof-Ve-26H" detailTextLabel="2Rw-7U-OFP" style="IBUITableViewCellStyleSubtitle" id="IZN-rN-ukc">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="PartyCardCell" textLabel="nof-Ve-26H" detailTextLabel="2Rw-7U-OFP" style="IBUITableViewCellStyleSubtitle" id="IZN-rN-ukc" customClass="PartyCardCell" customModule="Gatherly" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="50" width="293" height="43.666667938232422"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="IZN-rN-ukc" id="LVe-RX-b29">
                                             <rect key="frame" x="0.0" y="0.0" width="293" height="43.666667938232422"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Thanksgiving Potluck!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="nof-Ve-26H">
-                                                    <rect key="frame" x="16" y="9" width="125" height="15.333333333333334"/>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="nof-Ve-26H">
+                                                    <rect key="frame" x="15.999999999999998" y="9" width="26.333333333333332" height="15.333333333333334"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="14"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="11/23/24 " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2Rw-7U-OFP">
-                                                    <rect key="frame" x="16.000000000000004" y="24.333333333333336" width="42.333333333333336" height="11"/>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2Rw-7U-OFP">
+                                                    <rect key="frame" x="16.000000000000004" y="24.333333333333336" width="33.333333333333336" height="11"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="10"/>
                                                     <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -440,6 +440,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <segue destination="nhk-i1-va5" kind="show" identifier="PartyInfoSegue" id="t7Q-su-ApR"/>
                                         </connections>
@@ -977,11 +978,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="confetti2" translatesAutoresizingMaskIntoConstraints="NO" id="4St-x8-rKO">
-                                <rect key="frame" x="-258" y="-442" width="829" height="1364"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <rect key="contentStretch" x="0.0" y="1" width="1" height="1"/>
-                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="II8-ba-6Sx">
                                 <rect key="frame" x="16" y="180" width="361" height="99"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -993,14 +989,14 @@
                                 <rect key="frame" x="50" y="444" width="293" height="359"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="InviteeCell" textLabel="v7x-dC-dUN" style="IBUITableViewCellStyleDefault" id="Nk2-Wf-AqB">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="InviteeCardCell" textLabel="v7x-dC-dUN" style="IBUITableViewCellStyleDefault" id="Nk2-Wf-AqB" customClass="InviteeCardCell" customModule="Gatherly" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="50" width="293" height="43.666667938232422"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Nk2-Wf-AqB" id="X9o-vl-La6">
                                             <rect key="frame" x="0.0" y="0.0" width="293" height="43.666667938232422"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Thanksgiving Potluck!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="v7x-dC-dUN">
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="v7x-dC-dUN">
                                                     <rect key="frame" x="16" y="0.0" width="261" height="43.666667938232422"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="13"/>
@@ -1070,16 +1066,8 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="81i-dL-AGu">
-                                <rect key="frame" x="213" y="111" width="176" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="MarkerFelt-Wide" family="Marker Felt" pointSize="20"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="hRm-Vc-3Ne">
-                                <rect key="frame" x="66" y="371" width="260" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="hRm-Vc-3Ne">
+                                <rect key="frame" x="66.666666666666686" y="363" width="260" height="32"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <segments>
                                     <segment title="Going"/>
@@ -1101,9 +1089,8 @@
                                     <action selector="receiverWishlistPressed:" destination="nhk-i1-va5" eventType="touchUpInside" id="n3m-uD-YmG"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F5g-ro-izn">
-                                <rect key="frame" x="120" y="371" width="152" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F5g-ro-izn">
+                                <rect key="frame" x="122" y="363.66666666666669" width="149" height="30.333333333333314"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Assign Secret Santa">
                                     <fontDescription key="titleFontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="15"/>
@@ -1153,10 +1140,16 @@
                                 <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="RSVP Info" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Ma-ck-XXo">
-                                <rect key="frame" x="137" y="415" width="108" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RSVP Info" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Ma-ck-XXo">
+                                <rect key="frame" x="150.66666666666666" y="419" width="91.666666666666657" height="25"/>
                                 <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="23"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="81i-dL-AGu">
+                                <rect key="frame" x="215" y="111" width="176" height="27"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="MarkerFelt-Wide" family="Marker Felt" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -1164,9 +1157,18 @@
                         <viewLayoutGuide key="safeArea" id="Ze0-Rb-dL4"/>
                         <color key="backgroundColor" red="0.40392160420000001" green="0.49803921579999999" blue="0.49019610879999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
+                            <constraint firstItem="1Ma-ck-XXo" firstAttribute="top" secondItem="hRm-Vc-3Ne" secondAttribute="bottom" constant="25" id="BFH-Pq-rH6"/>
                             <constraint firstItem="Ze0-Rb-dL4" firstAttribute="trailing" secondItem="fO0-H4-ReX" secondAttribute="trailing" constant="50" id="FTQ-I5-Ihf"/>
                             <constraint firstItem="fO0-H4-ReX" firstAttribute="top" secondItem="Ze0-Rb-dL4" secondAttribute="top" constant="400" id="KcD-7e-OUB"/>
+                            <constraint firstItem="F5g-ro-izn" firstAttribute="centerX" secondItem="VwS-bD-OUc" secondAttribute="centerX" id="QU7-im-vec"/>
+                            <constraint firstItem="hRm-Vc-3Ne" firstAttribute="centerX" secondItem="VwS-bD-OUc" secondAttribute="centerX" id="Qs5-r7-P5B"/>
+                            <constraint firstItem="1Ma-ck-XXo" firstAttribute="centerX" secondItem="VwS-bD-OUc" secondAttribute="centerX" id="UAI-cI-pc2"/>
+                            <constraint firstItem="fO0-H4-ReX" firstAttribute="top" secondItem="1Ma-ck-XXo" secondAttribute="bottom" id="VVC-41-Lzl"/>
                             <constraint firstItem="fO0-H4-ReX" firstAttribute="leading" secondItem="Ze0-Rb-dL4" secondAttribute="leading" constant="50" id="WgI-UV-GMU"/>
+                            <constraint firstItem="fO0-H4-ReX" firstAttribute="top" secondItem="1Ma-ck-XXo" secondAttribute="bottom" id="XLm-7H-abT"/>
+                            <constraint firstItem="1Ma-ck-XXo" firstAttribute="top" secondItem="F5g-ro-izn" secondAttribute="bottom" constant="25" id="iEi-2I-A1l"/>
+                            <constraint firstItem="fO0-H4-ReX" firstAttribute="top" secondItem="1Ma-ck-XXo" secondAttribute="bottom" id="ipT-bG-Ob0"/>
+                            <constraint firstItem="1Ma-ck-XXo" firstAttribute="top" secondItem="hRm-Vc-3Ne" secondAttribute="bottom" constant="25" id="nca-k1-QCw"/>
                             <constraint firstItem="fO0-H4-ReX" firstAttribute="bottom" secondItem="Ze0-Rb-dL4" secondAttribute="bottom" id="v17-Um-1Vd"/>
                         </constraints>
                     </view>
@@ -2164,7 +2166,6 @@
     </inferredMetricsTieBreakers>
     <color key="tintColor" systemColor="labelColor"/>
     <resources>
-        <image name="confetti2" width="1500" height="900"/>
         <image name="gearshape.fill" catalog="system" width="128" height="123"/>
         <image name="logoapp" width="900" height="1500"/>
         <systemColor name="darkTextColor">
