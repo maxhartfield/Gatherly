@@ -59,6 +59,8 @@ class PartyInfoViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.backgroundColor = .clear
         tableView.delegate = self
         tableView.dataSource = self
+        partyID.isEditable = false
+        partyID.isSelectable = true
         
         // secret santa
         viewWishlistButton.isHidden = true
