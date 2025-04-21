@@ -67,17 +67,6 @@ class EditPartyViewController: UIViewController {
                             print("Error retrieving party data: \(error.localizedDescription)")
                             return
                         }
-                        guard let partyData = partyDoc?.data(),
-                              let eventId = partyData["calendarEventId"] as? String else {
-                            print("No calendar event ID found.")
-                            return
-                        }
-
-                        if calendarEnabled {
-                            self.updatePartyInCalendar(eventId: eventId, newName: updatedName, newDescription: updatedDescription, newStartDate: selectedDate)
-                        }
-
-                        self.updateInviteesCalendar(partyId: partyId, newName: updatedName, newDescription: updatedDescription, newStartDate: selectedDate)
                         
                         showAlert(on: self, title: "Success", message: "Party details updated!") {
                             self.party?.name = updatedName
@@ -89,6 +78,18 @@ class EditPartyViewController: UIViewController {
                             }
                             self.navigationController?.popViewController(animated: true)
                         }
+                        
+                        guard let partyData = partyDoc?.data(),
+                              let eventId = partyData["calendarEventId"] as? String else {
+                            print("No calendar event ID found.")
+                            return
+                        }
+
+                        if calendarEnabled {
+                            self.updatePartyInCalendar(eventId: eventId, newName: updatedName, newDescription: updatedDescription, newStartDate: selectedDate)
+                        }
+
+                        self.updateInviteesCalendar(partyId: partyId, newName: updatedName, newDescription: updatedDescription, newStartDate: selectedDate)
                     }
                 }
             }
